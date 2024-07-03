@@ -9,10 +9,6 @@ final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
 
 class Home extends ConsumerWidget {
 
-  // addNote( ) {
-  //   Navigator.pushNamed(context, 'home', MaterialPageRoute(builder: (context) => NoteEditor()));
-  // }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(

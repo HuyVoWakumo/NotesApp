@@ -15,7 +15,7 @@ class MyDatabase {
       await db.execute("CREATE TABLE Note ("
           "id INTEGER PRIMARY KEY,"
           "title TEXT,"
-          "content TEXT,"
+          "content TEXT"
           ")");
     });
   }

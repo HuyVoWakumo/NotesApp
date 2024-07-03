@@ -5,7 +5,8 @@ import 'package:notes_app/routes.dart';
 import 'package:notes_app/views/home.dart';
 
 void main() async {
-  MyDatabase.instance.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await MyDatabase.instance.init();
   runApp(const MainApp());
 }
 
