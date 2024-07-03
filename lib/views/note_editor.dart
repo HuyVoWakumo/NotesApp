@@ -8,11 +8,11 @@ class NoteEditor extends ConsumerWidget {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  var currentNote = null;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments;
-    var currentNote = null;
     if (args != null) {
 
     } 
@@ -28,17 +28,16 @@ class NoteEditor extends ConsumerWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: titleController,
               decoration: InputDecoration(
-                helperText: titleController.text == '' ? "Title" : null
+                hintText: titleController.text == '' ? "Title" : null
               ),
-              maxLines: 5,
-              cursorHeight: 10,
+              maxLines: 2,
             ),
             TextFormField(
               validator: validateEmpty,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: contentController,
               decoration: InputDecoration(
-                helperText: contentController.text == '' ? "Type something" : null
+                hintText: contentController.text == '' ? "Type something" : null
               ),
               maxLines: 10,
             )
@@ -50,49 +49,55 @@ class NoteEditor extends ConsumerWidget {
 
   appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      leading: IconButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Icon(Icons.info),
-                  content: const Text("Save changes ?"),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }, 
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(5),
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+      actions: [
+        IconButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Icon(Icons.info),
+                    content: const Text("Save changes ?"),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(5),
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Discard"),
                       ),
-                      child: const Text("Discard"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        final title = titleController.text;
-                        final content = contentController.text;
-                        ref.read(notesProvider).add(title, content);
-                        Navigator.of(context).pop();
-                      }, 
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(5),
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
+                      ElevatedButton(
+                        onPressed: () {
+                          final title = titleController.text;
+                          final content = contentController.text;
+                          if (currentNote == null) {
+                            ref.read(notesProvider).add(title, content);
+                            Navigator.popUntil(context, ModalRoute.withName('/home'));
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(5),
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Save"),
                       ),
-                      child: const Text("Save"),
-                    ),
-                  ],
-                );
-              }
-            );
-          }
-        },
-        icon: const Icon(Icons.chevron_left),
-      )
+                    ],
+                  );
+                }
+              );
+            }
+          },
+          icon: const Icon(Icons.save)
+        )
+      ],
     );
   }
 

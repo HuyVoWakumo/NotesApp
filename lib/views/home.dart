@@ -9,12 +9,9 @@ final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
 
 class Home extends ConsumerWidget {
 
-  addNote(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor()))
-    .then((value) {
-
-    });
-  }
+  // addNote( ) {
+  //   Navigator.pushNamed(context, 'home', MaterialPageRoute(builder: (context) => NoteEditor()));
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,10 +21,13 @@ class Home extends ConsumerWidget {
         padding: const EdgeInsets.all(10),
         children: ref.watch(notesProvider).notes.map((note) => NoteItem(note)).toList(),
       ),
-      // floatingActionButton: IconButton(
-      //   onPressed: addNote(context),
-      //   icon: const Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor()));
+        },
+        shape: const CircleBorder(side: BorderSide(width: 1)),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 

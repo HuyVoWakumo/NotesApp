@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/database.dart';
+import 'package:notes_app/routes.dart';
 import 'package:notes_app/views/home.dart';
 
 void main() async {
@@ -15,11 +16,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Home(),
-          ),
-        ),
+        routes: Routes.init(context),
+        initialRoute: '/home',
       ),
     );
   }
