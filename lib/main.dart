@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/database.dart';
 import 'package:notes_app/views/home.dart';
 
@@ -12,10 +13,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Home(),
+    return ProviderScope(
+      child: MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Home(),
+          ),
         ),
       ),
     );
