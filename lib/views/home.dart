@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/view_models/note_viewmodel.dart';
 import 'package:notes_app/views/note_editor.dart';
+import 'package:notes_app/views/search.dart';
 import 'package:notes_app/widgets/note_item.dart';
 
 final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
@@ -23,7 +24,7 @@ class HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
+      appBar: appBar(context),
       body: ListView(
         padding: const EdgeInsets.all(10),
         children: ref.watch(notesProvider).notes.map((note) => NoteItem(note)).toList(),
@@ -38,13 +39,13 @@ class HomeState extends ConsumerState<Home> {
     );
   }
 
-  appBar() {
+  appBar(BuildContext context) {
     return AppBar(
       title: const Text('Notes', style: TextStyle(fontSize: 20)),
       actions: [
         IconButton(
           onPressed: () {
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Search()));
           },
           icon: const Icon(Icons.search),
         ),

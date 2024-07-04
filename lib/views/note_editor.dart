@@ -48,6 +48,9 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                 hintText: titleController.text == '' ? "Title" : null
               ),
               maxLines: 2,
+              style: const TextStyle(
+                overflow: TextOverflow.ellipsis,
+              )
             ),
             TextFormField(
               validator: validateEmpty,
@@ -57,6 +60,9 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                 hintText: contentController.text == '' ? "Type something" : null
               ),
               maxLines: 10,
+              style: const TextStyle(
+                overflow: TextOverflow.ellipsis
+              )
             )
           ],
         ),

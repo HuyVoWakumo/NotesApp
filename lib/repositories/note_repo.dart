@@ -22,8 +22,8 @@ class NoteRepo {
   }
 
   // filter note 
-  filter(String title) async {
-    var res = await db.query('Note', where: 'title = ?', whereArgs: [title]);
+  Future<List<Note>> filter(String title) async {
+    var res = await db.query('Note', where: 'title like ?', whereArgs: ['%$title%']);
     return res.isNotEmpty ? res.map((r) => Note.fromMap(r)).toList() : List.empty();
   }
 

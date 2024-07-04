@@ -30,6 +30,11 @@ class NoteNotifier extends ChangeNotifier {
     return await repo.get(id);
   }
 
+  filter(String title) async {
+    return await repo.filter(title);
+    // notifyListeners();
+  }
+
   update(int id, String title, String content) async {
     Note note = Note(
       id: id,
@@ -44,5 +49,5 @@ class NoteNotifier extends ChangeNotifier {
     await repo.delete(id);
     await getAll();
   }
-  
+
 }
