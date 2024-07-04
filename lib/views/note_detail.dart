@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home.dart';
+import 'package:notes_app/views/note_editor.dart';
 
 class NoteDetail extends ConsumerStatefulWidget {
-  const NoteDetail({super.key});
+  int id;
+  NoteDetail(this.id, {super.key});
   
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NoteDetailState();
@@ -14,22 +16,26 @@ class NoteDetail extends ConsumerStatefulWidget {
 class _NoteDetailState extends ConsumerState<NoteDetail> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  var currentNote;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(notesProvider).get(widget.id);
+    currentNote = ref.read(notesProvider.notifier).currentNote;
+    titleController.text = currentNote != null ? currentNote.title: "";
+    contentController.text = currentNote != null ? currentNote.content : "";
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    ref.read(notesProvider).get(args['id']);
-    var currentNote = ref.watch(notesProvider).currentNote;
-    titleController.text = currentNote != null ? currentNote.title: "";
-    contentController.text = currentNote != null ? currentNote.content : "";
-
     return Scaffold(
       appBar: AppBar(
         actions: [  
           IconButton(
             onPressed: () =>
               currentNote != null 
-              ? Navigator.pushNamed(context, '/note-editor', arguments: { 'id' : currentNote.id })
+              ? Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(widget.id)))
                 // .then((value) => ref.read(notesProvider).currentNote = null) 
               : null,
             icon: const Icon(Icons.edit)

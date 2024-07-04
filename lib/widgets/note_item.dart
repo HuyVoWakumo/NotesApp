@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home.dart';
+import 'package:notes_app/views/note_detail.dart';
+import 'package:notes_app/views/note_editor.dart';
 
 class NoteItem extends ConsumerStatefulWidget {
   Note note;
@@ -22,10 +24,7 @@ class _NoteItemState extends ConsumerState<NoteItem> {
         children: [
           SlidableAction(
             onPressed: (context) {
-              Navigator.pushNamed(context, '/note-detail', arguments: { 'id' : widget.note.id })
-              .then((value) {
-                // ref.read(notesProvider).currentNote = null;
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetail(widget.note.id!)));
             },
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,

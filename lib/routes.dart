@@ -9,8 +9,6 @@ class Routes {
   static Map<String, Widget Function(BuildContext)> init(BuildContext context) {
     _route = {
       '/home': (context) => Home(),
-      '/note-detail': (context) => NoteDetail(),
-      '/note-editor': (context) => NoteEditor(),
     };
     return _route;
   }

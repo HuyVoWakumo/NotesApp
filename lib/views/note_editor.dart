@@ -5,7 +5,8 @@ import 'package:notes_app/utils/validators.dart';
 import 'package:notes_app/views/home.dart';
 
 class NoteEditor extends ConsumerStatefulWidget {
-  const NoteEditor({super.key});
+  int? id;
+  NoteEditor(this.id, {super.key});
 
    @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NoteEditorState();
@@ -18,16 +19,20 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
   var currentNote;
 
 
-  @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments;
-    if (args != null) {
-      var noteId = (args as Map<String, dynamic>)['id'];
-      ref.read(notesProvider).get(noteId);
-      currentNote = ref.watch(notesProvider).currentNote;
+@override
+  void initState() {
+    super.initState();
+    if (widget.id != null) {
+      ref.read(notesProvider).get(widget.id!);
+      currentNote = ref.read(notesProvider).currentNote;
       titleController.text = currentNote != null ? currentNote.title: "";
       contentController.text = currentNote != null ? currentNote.content : "";
-    } 
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: appBar(context),
       body: Form(
@@ -67,10 +72,11 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
             if (_formKey.currentState!.validate()) {
               showDialog(
                 context: context,
-                builder: (context) {
+                builder: (context) {          
                   return AlertDialog(
                     title: const Icon(Icons.info),
-                    content: const Text("Save changes ?"),
+                    content: const Text("Save changes ?", textAlign: TextAlign.center),
+                    actionsAlignment: MainAxisAlignment.spaceAround,
                     actions: [
                       ElevatedButton(
                         onPressed: () {
@@ -87,6 +93,7 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                         onPressed: () {
                           final title = titleController.text;
                           final content = contentController.text;
+                          print(title);
                           if (currentNote == null) {
                             ref.read(notesProvider).add(title, content);
                             Navigator.popUntil(context, ModalRoute.withName('/home'));

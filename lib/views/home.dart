@@ -30,7 +30,7 @@ class HomeState extends ConsumerState<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(null)));
         },
         shape: const CircleBorder(side: BorderSide(width: 1)),
         child: const Icon(Icons.add),
