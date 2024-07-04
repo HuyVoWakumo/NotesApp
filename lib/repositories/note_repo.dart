@@ -16,7 +16,7 @@ class NoteRepo {
   }
 
   // get note
-  Future<Note?> get(String id) async {
+  Future<Note?> get(int id) async {
     var res = await db.query('Note', where: 'id = ?', whereArgs: [id]);
     return res.isNotEmpty ? Note.fromMap(res.first) : null;
   }

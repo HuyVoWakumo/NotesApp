@@ -4,20 +4,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/utils/validators.dart';
 import 'package:notes_app/views/home.dart';
 
-class NoteEditor extends ConsumerWidget {
+class NoteEditor extends ConsumerStatefulWidget {
+  const NoteEditor({super.key});
+
+   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _NoteEditorState();
+}
+
+class _NoteEditorState extends ConsumerState<NoteEditor> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var currentNote = null;
+  var currentNote;
+
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments;
     if (args != null) {
-
+      var noteId = (args as Map<String, dynamic>)['id'];
+      ref.read(notesProvider).get(noteId);
+      currentNote = ref.watch(notesProvider).currentNote;
+      titleController.text = currentNote != null ? currentNote.title: "";
+      contentController.text = currentNote != null ? currentNote.content : "";
     } 
     return Scaffold(
-      appBar: appBar(context, ref),
+      appBar: appBar(context),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -47,7 +59,7 @@ class NoteEditor extends ConsumerWidget {
     );
   }
 
-  appBar(BuildContext context, WidgetRef ref) {
+  appBar(BuildContext context) {
     return AppBar(
       actions: [
         IconButton(
@@ -79,7 +91,8 @@ class NoteEditor extends ConsumerWidget {
                             ref.read(notesProvider).add(title, content);
                             Navigator.popUntil(context, ModalRoute.withName('/home'));
                           } else {
-                            Navigator.of(context).pop();
+                            ref.read(notesProvider).update(currentNote.id, title, content);
+                            Navigator.popUntil(context, ModalRoute.withName('/home'));
                           }
                         }, 
                         style: ElevatedButton.styleFrom(

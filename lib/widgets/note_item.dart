@@ -10,15 +10,9 @@ class NoteItem extends ConsumerStatefulWidget {
   NoteItem(this.note, {super.key});
 
   @override
-  NoteItemState createState() => NoteItemState();
-  
-
+  ConsumerState<NoteItem> createState() => _NoteItemState();
 }
-class NoteItemState extends ConsumerState<NoteItem> {
-
-  deleteNote(BuildContext context) {
-    
-  }
+class _NoteItemState extends ConsumerState<NoteItem> {
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +22,10 @@ class NoteItemState extends ConsumerState<NoteItem> {
         children: [
           SlidableAction(
             onPressed: (context) {
-
+              Navigator.pushNamed(context, '/note-detail', arguments: { 'id' : widget.note.id })
+              .then((value) {
+                // ref.read(notesProvider).currentNote = null;
+              });
             },
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
@@ -64,7 +61,7 @@ class NoteItemState extends ConsumerState<NoteItem> {
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                       ),
-                      child: const Text("Save"),
+                      child: const Text("Delete"),
                     ),
                   ],
                 )

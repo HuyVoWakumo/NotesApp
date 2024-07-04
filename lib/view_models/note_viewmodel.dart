@@ -9,6 +9,7 @@ const _uuid = Uuid();
 class NoteNotifier extends ChangeNotifier {
   final repo = NoteRepo();
   List<Note> notes = [];
+  Note? currentNote;
 
   add(String title, String content) async {
     Note note = Note(
@@ -25,6 +26,21 @@ class NoteNotifier extends ChangeNotifier {
   getAll() async {
     notes = await repo.getAll();
     notifyListeners();
+  }
+
+  get(int id) async {
+    currentNote = await repo.get(id);
+    notifyListeners();
+  }
+
+  update(int id, String title, String content) async {
+    Note note = Note(
+      id: id,
+      title: title,
+      content: content,
+    );
+    await repo.update(note);
+    await getAll();
   }
 
   delete(int id) async {
