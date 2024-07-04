@@ -10,20 +10,27 @@ class NoteNotifier extends ChangeNotifier {
   final repo = NoteRepo();
   List<Note> notes = [];
 
-  add(String title, String content) {
+  add(String title, String content) async {
     Note note = Note(
       id: null,
       title: title,
       content: content,
     );
     notes = [...notes, note];
-    // notes.add(note);
-    repo.add(note);
-    notifyListeners();
+    await repo.add(note);
+    await getAll();
+    // notifyListeners();
   }
 
   getAll() async {
     notes = await repo.getAll();
     notifyListeners();
+  }
+
+  delete(int id) async {
+    await repo.delete(id);
+    await getAll();
+
+    // notifyListeners();
   }
 }

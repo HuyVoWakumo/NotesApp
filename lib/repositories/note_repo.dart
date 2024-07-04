@@ -33,7 +33,7 @@ class NoteRepo {
   }
 
   // delete note
-  delete(String id) async {
+  delete(int id) async {
     return await db.delete('Note', where: 'id = ?', whereArgs: [id]);
   }
 
