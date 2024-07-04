@@ -16,17 +16,17 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  var currentNote;
 
 
 @override
   void initState() {
     super.initState();
     if (widget.id != null) {
-      ref.read(notesProvider).get(widget.id!);
-      currentNote = ref.read(notesProvider).currentNote;
-      titleController.text = currentNote != null ? currentNote.title: "";
-      contentController.text = currentNote != null ? currentNote.content : "";
+      ref.read(notesProvider).get(widget.id!)
+      .then((value) {
+        titleController.text = value != null ? value.title: "";
+        contentController.text = value != null ? value.content : "";
+      });
     }
   }
 
@@ -93,12 +93,11 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                         onPressed: () {
                           final title = titleController.text;
                           final content = contentController.text;
-                          print(title);
-                          if (currentNote == null) {
+                          if (widget.id == null) {
                             ref.read(notesProvider).add(title, content);
                             Navigator.popUntil(context, ModalRoute.withName('/home'));
                           } else {
-                            ref.read(notesProvider).update(currentNote.id, title, content);
+                            ref.read(notesProvider).update(widget.id!, title, content);
                             Navigator.popUntil(context, ModalRoute.withName('/home'));
                           }
                         }, 

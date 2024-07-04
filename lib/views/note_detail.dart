@@ -14,17 +14,17 @@ class NoteDetail extends ConsumerStatefulWidget {
 }
 
 class _NoteDetailState extends ConsumerState<NoteDetail> {
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
-  var currentNote;
+  final titleController = TextEditingController(text: "");
+  final contentController = TextEditingController(text: "");
 
   @override
   void initState() {
     super.initState();
-    ref.read(notesProvider).get(widget.id);
-    currentNote = ref.read(notesProvider.notifier).currentNote;
-    titleController.text = currentNote != null ? currentNote.title: "";
-    contentController.text = currentNote != null ? currentNote.content : "";
+    ref.read(notesProvider).get(widget.id)
+    .then((value) {
+      titleController.text = value.title;
+      contentController.text = value.content;
+    });
   }
 
   @override
@@ -33,11 +33,7 @@ class _NoteDetailState extends ConsumerState<NoteDetail> {
       appBar: AppBar(
         actions: [  
           IconButton(
-            onPressed: () =>
-              currentNote != null 
-              ? Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(widget.id)))
-                // .then((value) => ref.read(notesProvider).currentNote = null) 
-              : null,
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(widget.id))),
             icon: const Icon(Icons.edit)
           )
         ],
