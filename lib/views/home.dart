@@ -7,10 +7,21 @@ import 'package:notes_app/widgets/note_item.dart';
 
 final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
 
-class Home extends ConsumerWidget {
+class Home extends ConsumerStatefulWidget {
+  const Home({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  HomeState createState() => HomeState();
+}
+class HomeState extends ConsumerState<Home> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(notesProvider).getAll();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
       body: ListView(
@@ -46,7 +57,7 @@ class Home extends ConsumerWidget {
       ],
     );
   }
-
 }
+
 
 
