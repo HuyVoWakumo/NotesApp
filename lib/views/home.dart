@@ -1,16 +1,64 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notes_app/view_models/note_viewmodel.dart';
+import 'package:notes_app/views/note_editor.dart';
+import 'package:notes_app/views/search.dart';
+import 'package:notes_app/widgets/note_item.dart';
 
-class Home extends StatefulWidget {
+final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
+
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
+class HomeState extends ConsumerState<Home> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(notesProvider).getAll();
+  }
 
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: appBar(context),
+      body: ListView(
+        padding: const EdgeInsets.all(10),
+        children: ref.watch(notesProvider).notes.map((note) => NoteItem(note)).toList(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(null)));
+        },
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  appBar(BuildContext context) {
+    return AppBar(
+      title: const Text('Notes', style: TextStyle(fontSize: 20)),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Search()));
+          },
+          icon: const Icon(Icons.search),
+        ),
+        IconButton(
+          onPressed: () {
+
+          }, 
+          icon: const Icon(Icons.info_outline),
+        )
+      ],
+    );
   }
 }
+
+
+

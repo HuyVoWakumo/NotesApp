@@ -1,5 +1,5 @@
 class Note {
-  final String id;
+  int? id;
   String title;
   String content;
 
