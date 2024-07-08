@@ -18,6 +18,7 @@ class _SearchState extends ConsumerState<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Container(
           // height: MediaQuery.of(context).size.height,
@@ -25,8 +26,16 @@ class _SearchState extends ConsumerState<Search> {
           child: Column(
             children: [
               TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
                   hintText: "Search by title...",
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
                 onChanged: (value) {
                   ref.read(notesProvider).filter(value)
@@ -37,6 +46,7 @@ class _SearchState extends ConsumerState<Search> {
                   });
                 },
               ),
+              const SizedBox(height: 20),
               filteredNotes.isNotEmpty
               ? Column(
                 children: filteredNotes.map((note) => NoteItem(note)).toList())

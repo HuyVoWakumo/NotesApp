@@ -47,19 +47,22 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
               decoration: InputDecoration(
                 hintText: titleController.text == '' ? "Title" : null
               ),
-              maxLines: 2,
+              maxLines: null,
               style: const TextStyle(
+                fontSize: 25,
                 overflow: TextOverflow.ellipsis,
               )
             ),
+            const SizedBox(height: 20),
             TextFormField(
               validator: validateEmpty,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: contentController,
               decoration: InputDecoration(
+                border: InputBorder.none,
                 hintText: contentController.text == '' ? "Type something" : null
               ),
-              maxLines: 10,
+              maxLines: null,
               style: const TextStyle(
                 overflow: TextOverflow.ellipsis
               )

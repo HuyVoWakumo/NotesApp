@@ -5,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home.dart';
 import 'package:notes_app/views/note_detail.dart';
-import 'package:notes_app/views/note_editor.dart';
 
 class NoteItem extends ConsumerStatefulWidget {
   Note note;
@@ -36,8 +35,10 @@ class _NoteItemState extends ConsumerState<NoteItem> {
               showDialog(
                 context: context, 
                 builder: (context) => AlertDialog(
+                  alignment: Alignment.center,
                   title: const Icon(Icons.warning),
-                  content: const Text('Confirm delete ?'),
+                  content: const Text('Confirm delete ?', textAlign: TextAlign.center),
+                  actionsAlignment: MainAxisAlignment.spaceAround,
                   actions: [
                     ElevatedButton(
                       onPressed: () {
@@ -82,7 +83,11 @@ class _NoteItemState extends ConsumerState<NoteItem> {
           color: Colors.grey[200],
         ),
         child: Center(
-          child: Text(widget.note.title),
+          child: Text(
+            widget.note.title, 
+            maxLines: 2,
+            style: const TextStyle(overflow: TextOverflow.ellipsis)
+          ),
         ),
       ),
     );

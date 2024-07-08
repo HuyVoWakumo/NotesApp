@@ -33,7 +33,7 @@ class HomeState extends ConsumerState<Home> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(null)));
         },
-        shape: const CircleBorder(side: BorderSide(width: 1)),
+        shape: const CircleBorder(),
         child: const Icon(Icons.add),
       ),
     );

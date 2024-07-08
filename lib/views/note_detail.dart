@@ -44,15 +44,23 @@ class _NoteDetailState extends ConsumerState<NoteDetail> {
           TextField(
             readOnly: true,
             controller: titleController,
-            maxLines: 2,
+            maxLines: null,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
             style: const TextStyle(
+              fontSize: 25,
               overflow: TextOverflow.ellipsis
             ),
           ),
+          const Divider(),
           TextField(
             readOnly: true,
             controller: contentController,
-            maxLines: 10,
+            maxLines: null,
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
             style: const TextStyle(
               overflow: TextOverflow.ellipsis
             ),
