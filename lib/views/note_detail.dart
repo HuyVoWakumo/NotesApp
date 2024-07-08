@@ -49,7 +49,7 @@ class _NoteDetailState extends ConsumerState<NoteDetail> {
               border: InputBorder.none,
             ),
             style: const TextStyle(
-              fontSize: 25,
+              fontSize: 30,
               overflow: TextOverflow.ellipsis
             ),
           ),

@@ -8,7 +8,8 @@ import 'package:notes_app/views/note_detail.dart';
 
 class NoteItem extends ConsumerStatefulWidget {
   Note note;
-  NoteItem(this.note, {super.key});
+  Color backgroundColor;
+  NoteItem(this.note, {this.backgroundColor = Colors.white60, super.key});
 
   @override
   ConsumerState<NoteItem> createState() => _NoteItemState();
@@ -17,76 +18,85 @@ class _NoteItemState extends ConsumerState<NoteItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (context) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetail(widget.note.id!)));
-            },
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-            icon: Icons.info,
-            label: 'Detail',
-          ),
-          SlidableAction(
-            onPressed: (context) {
-              showDialog(
-                context: context, 
-                builder: (context) => AlertDialog(
-                  alignment: Alignment.center,
-                  title: const Icon(Icons.warning),
-                  content: const Text('Confirm delete ?', textAlign: TextAlign.center),
-                  actionsAlignment: MainAxisAlignment.spaceAround,
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }, 
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(5),
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+    return Container(
+      margin: const EdgeInsets.only(top: 5, bottom: 5),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetail(widget.note.id!)));
+              },
+              backgroundColor: const Color.fromARGB(255, 53, 158, 244),
+              foregroundColor: Colors.white,
+              icon: Icons.info,
+              label: 'Detail',
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                showDialog(
+                  context: context, 
+                  builder: (context) => AlertDialog(
+                    alignment: Alignment.center,
+                    title: const Icon(Icons.warning),
+                    content: const Text('Confirm delete ?', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+                    actionsAlignment: MainAxisAlignment.spaceAround,
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
+                          backgroundColor: Color.fromARGB(241, 243, 74, 62),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                        ),
+                        child: const Text("Discard"),
                       ),
-                      child: const Text("Discard"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        ref.read(notesProvider).delete(widget.note.id!);
-                        Navigator.popUntil(context, ModalRoute.withName('/home'));
-                      }, 
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(5),
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
+                      ElevatedButton(
+                        onPressed: () {
+                          ref.read(notesProvider).delete(widget.note.id!);
+                          Navigator.popUntil(context, ModalRoute.withName('/home'));
+                        }, 
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                        ),
+                        child: const Text("Delete"),
                       ),
-                      child: const Text("Delete"),
-                    ),
-                  ],
-                )
-              );
-            },
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          )
-        ],
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.only(top: 5, bottom: 5),
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[200],
+                    ],
+                  )
+                );
+              },
+              borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
+            )
+          ],
         ),
-        child: Center(
-          child: Text(
-            widget.note.title, 
-            maxLines: 2,
-            style: const TextStyle(overflow: TextOverflow.ellipsis)
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(10),
+            color: widget.backgroundColor,
+          ),
+          child: Center(
+            child: Text(
+              widget.note.title, 
+              maxLines: 2,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
         ),
       ),

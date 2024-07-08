@@ -17,8 +17,11 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.dark,
         routes: Routes.init(context),
         initialRoute: '/home',
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

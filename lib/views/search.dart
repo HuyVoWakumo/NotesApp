@@ -13,6 +13,13 @@ class Search extends ConsumerStatefulWidget {
 }
 
 class _SearchState extends ConsumerState<Search> {
+  static const List<Color> noteBg = [
+    Color.fromRGBO(253, 153, 255, 1),
+    Color.fromRGBO(255, 158, 158, 1),
+    Color.fromRGBO(145, 244, 143, 1),
+    Color.fromRGBO(255, 245, 153, 1),
+    Color.fromRGBO(158, 255, 255, 1),
+  ];
   List<Note> filteredNotes = [];
 
   @override
@@ -32,7 +39,7 @@ class _SearchState extends ConsumerState<Search> {
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       width: 1,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -49,7 +56,7 @@ class _SearchState extends ConsumerState<Search> {
               const SizedBox(height: 20),
               filteredNotes.isNotEmpty
               ? Column(
-                children: filteredNotes.map((note) => NoteItem(note)).toList())
+                children: filteredNotes.asMap().map((index, note) => MapEntry(index, NoteItem(note, backgroundColor: noteBg[index]))).values.toList())
               : const Center(child: Text("No matching notes")) ,
               
             ],

@@ -49,7 +49,7 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
               ),
               maxLines: null,
               style: const TextStyle(
-                fontSize: 25,
+                fontSize: 30,
                 overflow: TextOverflow.ellipsis,
               )
             ),
@@ -84,7 +84,7 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                 builder: (context) {          
                   return AlertDialog(
                     title: const Icon(Icons.info),
-                    content: const Text("Save changes ?", textAlign: TextAlign.center),
+                    content: const Text("Save changes ?", textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
                     actionsAlignment: MainAxisAlignment.spaceAround,
                     actions: [
                       ElevatedButton(
@@ -92,9 +92,10 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                           Navigator.of(context).pop();
                         }, 
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(5),
-                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
+                          backgroundColor: const Color.fromARGB(241, 243, 74, 62),
                           foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                         ),
                         child: const Text("Discard"),
                       ),
@@ -111,9 +112,10 @@ class _NoteEditorState extends ConsumerState<NoteEditor> {
                           }
                         }, 
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                         ),
                         child: const Text("Save"),
                       ),
