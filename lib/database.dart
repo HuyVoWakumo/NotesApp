@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+// TODO REVIEW:
+// Let's convert to use singleton by riverpod
 class MyDatabase {
   MyDatabase._();
   static final MyDatabase instance = MyDatabase._();

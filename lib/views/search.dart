@@ -20,6 +20,9 @@ class _SearchState extends ConsumerState<Search> {
     Color.fromRGBO(255, 245, 153, 1),
     Color.fromRGBO(158, 255, 255, 1),
   ];
+  // TODO REVIEW:
+  // Consider to separate view model for this widget, must not use setState here
+  // Or consider to use one parent view model, combine with ref watch selector to control this change
   List<Note> filteredNotes = [];
 
   @override

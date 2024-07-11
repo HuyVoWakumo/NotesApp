@@ -10,6 +10,8 @@ class NoteNotifier extends ChangeNotifier {
   final repo = NoteRepo();
   List<Note> notes = [];
 
+  // TODO REVIEW:
+  // Please add function type, for example the below is void, also apply for all places
   add(String title, String content) async {
     Note note = Note(
       id: null,

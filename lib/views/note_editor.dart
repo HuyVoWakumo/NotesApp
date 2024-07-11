@@ -13,6 +13,9 @@ class NoteEditor extends ConsumerStatefulWidget {
 }
 
 class _NoteEditorState extends ConsumerState<NoteEditor> {
+  // TODO REVIEW:
+  // Consider to separate view model for this widget, must not initialize the below at view layer
+  // Or consider to use one parent view model, combine with ref watch selector to control this change
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();

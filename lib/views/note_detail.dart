@@ -33,6 +33,8 @@ class _NoteDetailState extends ConsumerState<NoteDetail> {
       appBar: AppBar(
         actions: [  
           IconButton(
+            // TODO REVIEW:
+            // Consider to use route name (like home) or new class instance
             onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(widget.id))),
             icon: const Icon(Icons.edit)
           )

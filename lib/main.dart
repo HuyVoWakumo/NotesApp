@@ -26,3 +26,9 @@ class MainApp extends StatelessWidget {
     );
   }
 }
+
+// TODO REVIEW:
+// Re-check all places, do format code and remove unused imports
+// Re-check all places, which one can use const then let's use it, don't forget to follow lint analysis
+// Re-check all places, MUST NOT use setState, only notifyListeners from change notifier
+// Your structure is still good, but let's consider to wrap view and view model to features layer, like inside folder home, it has home_view and home_view_model

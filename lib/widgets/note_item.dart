@@ -6,6 +6,8 @@ import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home.dart';
 import 'package:notes_app/views/note_detail.dart';
 
+// TODO REVIEW:
+// No more state here, consider to use stateless only
 class NoteItem extends ConsumerStatefulWidget {
   Note note;
   Color backgroundColor;
