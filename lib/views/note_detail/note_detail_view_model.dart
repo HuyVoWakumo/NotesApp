@@ -6,8 +6,8 @@ import 'package:notes_app/repositories/note_repo.dart';
 final noteDetailProvider = ChangeNotifierProvider((ref) => NoteDetailViewModel(ref.read(noteRepoProvider)));
 
 class NoteDetailViewModel extends ChangeNotifier {
-  final titleController = TextEditingController(text: "");
-  final contentController = TextEditingController(text: "");
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isReadOnly = true;
   late final NoteRepo _repo;
@@ -21,6 +21,7 @@ class NoteDetailViewModel extends ChangeNotifier {
     final note = await _repo.get(id);
     titleController.text = note!.title;
     contentController.text = note.content;
+    notifyListeners();
   }
 
   Future<void> add(String title, String content) async {
@@ -30,8 +31,6 @@ class NoteDetailViewModel extends ChangeNotifier {
       content: content,
     );
     await _repo.add(note!);
-    titleController.text = '';
-    contentController.text = '';
     notifyListeners();
   }
 
@@ -49,4 +48,11 @@ class NoteDetailViewModel extends ChangeNotifier {
     isReadOnly = !isReadOnly;
     notifyListeners();
   }
+
+  void clear() {
+    titleController.clear();
+    contentController.clear();
+    notifyListeners();
+  }
+
 }
