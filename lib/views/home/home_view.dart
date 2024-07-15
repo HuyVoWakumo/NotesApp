@@ -1,49 +1,41 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:notes_app/models/note_model.dart';
-import 'package:notes_app/view_models/note_viewmodel.dart';
-import 'package:notes_app/views/note_editor.dart';
-import 'package:notes_app/views/search.dart';
+import 'package:notes_app/views/home/home_view_model.dart';
+import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
 import 'package:notes_app/widgets/note_item.dart';
 
-final notesProvider = ChangeNotifierProvider((ref) => NoteNotifier());
-
-class Home extends ConsumerStatefulWidget {
-  const Home({super.key});
+class HomeView extends ConsumerStatefulWidget {
+  const HomeView({super.key});
 
   @override
   HomeState createState() => HomeState();
 }
-class HomeState extends ConsumerState<Home> {
-
-  static const List<Color> noteBg = [
-    Color.fromRGBO(253, 153, 255, 1),
-    Color.fromRGBO(255, 158, 158, 1),
-    Color.fromRGBO(145, 244, 143, 1),
-    Color.fromRGBO(255, 245, 153, 1),
-    Color.fromRGBO(158, 255, 255, 1),
-  ];
+class HomeState extends ConsumerState<HomeView> {
 
   @override
   void initState() {
     super.initState();
-    ref.read(notesProvider).getAll();
+    ref.read(homeProvider).getAll();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(noteDetailProvider.select((p) => p.note), (previous, next) {
+      ref.read(homeProvider).getAll();
+    });
+
     return Scaffold(
       appBar: appBar(context),
-      body: ref.watch(notesProvider).notes.isEmpty
+      body: ref.watch(homeProvider).notes.isEmpty
       ? const Center(child: Text('Create some notes !'))
       : ListView(
         padding: const EdgeInsets.all(10),
-        children: ref.watch(notesProvider).notes.asMap().map((index, note) => MapEntry(index, NoteItem(note, backgroundColor: noteBg[index % 5]))).values.toList(),
+        children: ref.watch(homeProvider).notes.asMap().map((index, note) => MapEntry(index, NoteItem(note, backgroundColor: ref.read(homeProvider).noteBg[index % 5]))).values.toList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteEditor(null)));
+          ref.read(noteDetailProvider).isReadOnly = false;
+          Navigator.pushNamed(context, '/note-detail', arguments: { 'id': null });
         },
         shape: const CircleBorder(),
         backgroundColor: Colors.black54,
@@ -58,7 +50,7 @@ class HomeState extends ConsumerState<Home> {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Search()));
+            Navigator.pushNamed(context, '/search');
           },
           icon: const Icon(Icons.search),
         ),

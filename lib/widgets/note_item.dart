@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:notes_app/models/note_model.dart';
-import 'package:notes_app/views/home.dart';
-import 'package:notes_app/views/note_detail.dart';
+import 'package:notes_app/views/home/home_view_model.dart';
+import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
 
 class NoteItem extends ConsumerStatefulWidget {
-  Note note;
-  Color backgroundColor;
-  NoteItem(this.note, {this.backgroundColor = Colors.white60, super.key});
+  final Note note;
+  final Color backgroundColor;
+  const NoteItem(this.note, {this.backgroundColor = Colors.white60, super.key});
 
   @override
   ConsumerState<NoteItem> createState() => _NoteItemState();
@@ -26,7 +25,8 @@ class _NoteItemState extends ConsumerState<NoteItem> {
           children: [
             SlidableAction(
               onPressed: (context) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetail(widget.note.id!)));
+                ref.read(noteDetailProvider).isReadOnly = true;
+                Navigator.pushNamed(context, '/note-detail', arguments: { 'id' : widget.note.id });
               },
               backgroundColor: const Color.fromARGB(255, 53, 158, 244),
               foregroundColor: Colors.white,
@@ -49,7 +49,7 @@ class _NoteItemState extends ConsumerState<NoteItem> {
                         }, 
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
-                          backgroundColor: Color.fromARGB(241, 243, 74, 62),
+                          backgroundColor: const Color.fromARGB(241, 243, 74, 62),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
                         ),
@@ -57,7 +57,7 @@ class _NoteItemState extends ConsumerState<NoteItem> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          ref.read(notesProvider).delete(widget.note.id!);
+                          ref.read(homeProvider).delete(widget.note.id!);
                           Navigator.popUntil(context, ModalRoute.withName('/home'));
                         }, 
                         style: ElevatedButton.styleFrom(
@@ -72,7 +72,7 @@ class _NoteItemState extends ConsumerState<NoteItem> {
                   )
                 );
               },
-              borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
+              borderRadius: const BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               icon: Icons.delete,
