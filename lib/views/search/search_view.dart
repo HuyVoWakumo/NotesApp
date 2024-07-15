@@ -3,22 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/search/search_view_model.dart';
 import 'package:notes_app/widgets/note_item.dart';
 
-class Search extends ConsumerStatefulWidget {
-  const Search({super.key});
+class SearchView extends ConsumerStatefulWidget {
+  const SearchView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SearchState();
 }
 
-class _SearchState extends ConsumerState<Search> {
-  static const List<Color> noteBg = [
-    Color.fromRGBO(253, 153, 255, 1),
-    Color.fromRGBO(255, 158, 158, 1),
-    Color.fromRGBO(145, 244, 143, 1),
-    Color.fromRGBO(255, 245, 153, 1),
-    Color.fromRGBO(158, 255, 255, 1),
-  ];
-
+class _SearchState extends ConsumerState<SearchView> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +42,7 @@ class _SearchState extends ConsumerState<Search> {
               ? Column(
                 children: ref.watch(searchViewModel).notes.asMap()
                 .map((index, note) => MapEntry(index, NoteItem(
-                  note, backgroundColor: noteBg[index % 5]))).values.toList())
+                  note, backgroundColor: ref.read(searchViewModel).noteBg[index % 5]))).values.toList())
               : const Center(child: Text("No matching notes")),
             ],
           ),

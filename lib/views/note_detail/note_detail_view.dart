@@ -3,15 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/utils/validators.dart';
 import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
 
-class NoteDetail extends ConsumerStatefulWidget {
+class NoteDetailView extends ConsumerStatefulWidget {
   final int? id;
-  const NoteDetail(this.id, {super.key});
+  const NoteDetailView(this.id, {super.key});
   
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NoteDetailState();
 }
 
-class _NoteDetailState extends ConsumerState<NoteDetail> {
+class _NoteDetailState extends ConsumerState<NoteDetailView> {
   
   @override
   void initState() {
