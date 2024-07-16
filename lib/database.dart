@@ -26,13 +26,34 @@ class MyDatabase extends ChangeNotifier{
   Future<Database> _init() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "todo_app.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {
+    return await openDatabase(path, version: 2, onOpen: (db) {
     }, onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE Note ("
-          "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+          "id VARCHAR(36) PRIMARY KEY, "
           "title TEXT, "
-          "content TEXT"
+          "content TEXT, "
+          "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, "
+          "id_user VARCHAR(36) NULL"
           ")");
+    }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
+      await db.execute('''
+          CREATE TABLE IF NOT EXISTS Note_new (
+            id VARCHAR(36) PRIMARY KEY,
+            title TEXT,
+            content TEXT
+          );
+
+          INSERT INTO Note_new (id, title, content)
+          SELECT id, title, content
+          FROM Note;
+
+          DROP TABLE Note;
+          ALTER TABLE Note_new RENAME TO Note;
+
+          ALTER TABLE Note ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+          ALTER TABLE Note ADD id_user VARCHAR(36) NULL;
+          '''
+          );
     });
   }
 }

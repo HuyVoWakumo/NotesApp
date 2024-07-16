@@ -17,7 +17,8 @@ class NoteRepo {
   // add note
   Future<int> add(Note note) async {
     final db = await _myDatabase!.db;
-    return await db.insert('Note', note.toMap());
+    final note6 = note.toMap();
+    return await db.insert('Note', note6);
   }
 
   Future<List<Note>> getAll() async {
@@ -27,7 +28,7 @@ class NoteRepo {
   }
 
   // get note
-  Future<Note?> get(int id) async {
+  Future<Note?> get(String id) async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: 'id = ?', whereArgs: [id]);
     return res.isNotEmpty ? Note.fromMap(res.first) : null;
@@ -47,7 +48,7 @@ class NoteRepo {
   }
 
   // delete note
-  Future<int> delete(int id) async {
+  Future<int> delete(String id) async {
     final db = await _myDatabase!.db;
     return await db.delete('Note', where: 'id = ?', whereArgs: [id]);
   }

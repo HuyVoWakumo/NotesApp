@@ -27,7 +27,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> delete(int id) async {
+  Future<void> delete(String id) async {
     await _repo.delete(id);
     await getAll();
   }

@@ -4,7 +4,7 @@ import 'package:notes_app/utils/validators.dart';
 import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
 
 class NoteDetailView extends ConsumerStatefulWidget {
-  final int? id;
+  final String? id;
   const NoteDetailView(this.id, {super.key});
   
   @override

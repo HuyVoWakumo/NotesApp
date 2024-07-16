@@ -1,20 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Note {
-  int? id;
+  String id;
   String title;
   String content;
+  String createdAt;
+  String? idUser;
 
-  Note({required this.id, required this.title, required this.content});
+  Note({required this.id, required this.title, required this.content, required this.createdAt, this.idUser});
 
   factory Note.fromMap(Map<String, dynamic> json) => Note(
-    id: json['id'],
+    id: json['id'].toString(),
     title: json['title'],
     content: json['content'],
+    createdAt: json['created_at'] ?? '',
+    idUser: json['id_user'],
   );
 
   Map<String, dynamic> toMap() => {
     'id': id,
     'title': title,
     'content': content,
+    'created_at': createdAt,
+    'id_user': idUser
   };
 }
