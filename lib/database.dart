@@ -50,7 +50,7 @@ class MyDatabase extends ChangeNotifier{
           DROP TABLE Note;
           ALTER TABLE Note_new RENAME TO Note;
 
-          ALTER TABLE Note ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+          ALTER TABLE Note ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
           ALTER TABLE Note ADD id_user VARCHAR(36) NULL;
           '''
           );

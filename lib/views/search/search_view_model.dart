@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
 
-final searchViewModel = ChangeNotifierProvider((ref) => SearchViewModel(ref.read(noteRepoProvider)));
+final searchViewModel = ChangeNotifierProvider(
+  (ref) => SearchViewModel(ref.read(noteRepoProvider))
+);
 
 class SearchViewModel extends ChangeNotifier {
   List<Color> noteBg = const [
@@ -22,7 +24,7 @@ class SearchViewModel extends ChangeNotifier {
   List<Note> notes = [];
 
   filter(String title) async {
-    notes =  await _repo.filter(title);
-    notifyListeners();
+    // notes =  await _repo.filter(title);
+    // notifyListeners();
   }
 }

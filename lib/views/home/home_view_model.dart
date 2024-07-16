@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
 
-final homeProvider = ChangeNotifierProvider((ref) => HomeViewModel(ref.read(noteRepoProvider)));
+final homeProvider = ChangeNotifierProvider(
+  (ref) => HomeViewModel(ref.read(noteRepoProvider))
+);
 
 class HomeViewModel extends ChangeNotifier {
   List<Color> noteBg = const [
@@ -28,7 +30,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> delete(String id) async {
-    await _repo.delete(id);
-    await getAll();
+    // await _repo.delete(id);
+    // await getAll();
   }
 }

@@ -70,8 +70,8 @@ class _NoteDetailState extends ConsumerState<NoteDetailView> {
                                   ref.read(noteDetailProvider).add(title, content);
                                   Navigator.popUntil(context, ModalRoute.withName('/home'));
                                 } else {
-                                  ref.read(noteDetailProvider).update(widget.id!, title, content);
-                                  Navigator.popUntil(context, ModalRoute.withName('/home'));
+                                  // ref.read(noteDetailProvider).update(widget.id!, title, content);
+                                  // Navigator.popUntil(context, ModalRoute.withName('/home'));
                                 }
                               }, 
                               style: ElevatedButton.styleFrom(
