@@ -26,10 +26,10 @@ class NoteDetailViewModel extends ChangeNotifier {
   }
 
   Future<void> get(String id) async {
-    // final note = await _repo.get(id);
-    // titleController.text = note!.title;
-    // contentController.text = note.content;
-    // notifyListeners();
+    final note = await _noteRepo.get(id);
+    titleController.text = note!.title;
+    contentController.text = note.content;
+    notifyListeners();
   }
 
   Future<void> add(String title, String content) async {
@@ -47,16 +47,20 @@ class NoteDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> update(String id, String title, String content) async {
-  //   note = Note(
-  //     id: id,
-  //     title: title,
-  //     content: content,
-  //     createdAt: DateTime.now().toString(),
-  //   );
-  //   await _repo.update(note!);
-  //   notifyListeners();
-  // }
+  Future<void> update(String id, String title, String content) async {
+    note = Note(
+      id: id,
+      title: title,
+      content: content,
+      createdAt: DateTime.now().toString(),
+      idUser: _userRepo.user?.id,
+    );
+    await _noteRepo.updateLocal(note!);
+    if(_userRepo.user != null) {
+      await _noteRepo.updateRemote(note!);
+    }
+    notifyListeners();
+  }
 
   void toggleEdit() {
     isReadOnly = !isReadOnly;
@@ -68,5 +72,4 @@ class NoteDetailViewModel extends ChangeNotifier {
     contentController.clear();
     notifyListeners();
   }
-
 }

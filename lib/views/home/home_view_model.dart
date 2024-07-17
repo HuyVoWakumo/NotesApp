@@ -33,7 +33,10 @@ class HomeViewModel extends ChangeNotifier {
   } 
 
   Future<void> delete(String id) async {
-    // await _noteRepo.delete(id);
-    // await getAll();
+    await _noteRepo.deleteLocal(id);
+    if (_userRepo.user != null) {
+      await _noteRepo.deleteRemote(id);
+    }
+    await getAll();
   }
 }

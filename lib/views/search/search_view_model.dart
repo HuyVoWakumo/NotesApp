@@ -16,15 +16,15 @@ class SearchViewModel extends ChangeNotifier {
     Color.fromRGBO(158, 255, 255, 1),
   ];
 
-  late final NoteRepo _repo;
-  SearchViewModel(NoteRepo repo) {
-    _repo = repo;
+  late final NoteRepo _noteRepo;
+  SearchViewModel(NoteRepo noteRepo) {
+    _noteRepo = noteRepo;
   }
 
   List<Note> notes = [];
 
-  filter(String title) async {
-    // notes =  await _repo.filter(title);
-    // notifyListeners();
+  Future<void> filter(String title) async {
+    notes =  await _noteRepo.filter(title);
+    notifyListeners();
   }
 }

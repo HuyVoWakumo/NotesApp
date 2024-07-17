@@ -9,7 +9,7 @@ class UserRemoteDatasource {
   UserRemoteDatasource._();
   static final UserRemoteDatasource _instance = UserRemoteDatasource._();
   final _supabase = Supabase.instance.client;
-  
+
   factory UserRemoteDatasource() {
     return _instance;
   }
@@ -27,5 +27,4 @@ class UserRemoteDatasource {
       password: password
     );
   }
-
 }

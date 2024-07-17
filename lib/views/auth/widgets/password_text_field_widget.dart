@@ -1,7 +1,5 @@
 import 'dart:core';
-
 import 'package:flutter/material.dart';
-
 
 class PasswordTextFieldWidget extends StatefulWidget {
   bool obscureText = true;

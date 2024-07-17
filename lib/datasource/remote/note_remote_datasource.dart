@@ -19,32 +19,24 @@ class NoteRemoteDatasource {
 
   // add note
   Future<void> add(Note note) async {
-    _supabase.from('notes')
+    await _supabase.from('notes')
     .insert(note.toMap())
     .then((value) => log('Inserted supabase'));
   }
 
-  // Future<List<Note>> getAll() async {
+  // edit note
+  Future<void> update(Note note) async {
+    await _supabase.from('notes')
+    .update({
+      'title': note.title,
+      'content': note.content
+    }).eq('id', note.id);
+  }
 
-  // }
-
-  // // get note
-  // Future<Note?> get(String id) async {
-
-  // }
-
-  // // filter note 
-  // Future<List<Note>> filter(String title) async {
-
-  // }
-
-  // // edit note
-  // Future<int> update(Note note) async {
-
-  // }
-
-  // // delete note
-  // Future<int> delete(String id) async {
-
-  // }
+  // delete note
+  Future<void> delete(String id) async {
+    await _supabase.from('notes')
+    .delete()
+    .eq('id', id);
+  }
 }
