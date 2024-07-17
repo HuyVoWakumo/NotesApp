@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
+import 'package:notes_app/repositories/user_repo.dart';
 import 'package:uuid/uuid.dart';
 
 final noteDetailProvider = ChangeNotifierProvider(
-  (ref) => NoteDetailViewModel(ref.read(noteRepoProvider))
+  (ref) => NoteDetailViewModel(ref.read(noteRepoProvider), ref.read(userRepoProvider))
 );
 
 const uuid = Uuid();
@@ -15,11 +16,13 @@ class NoteDetailViewModel extends ChangeNotifier {
   final contentController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isReadOnly = true;
-  late final NoteRepo _repo;
+  late final NoteRepo _noteRepo;
+  late final UserRepo _userRepo;
   Note? note;
 
-  NoteDetailViewModel(NoteRepo repo) {
-    _repo = repo;
+  NoteDetailViewModel(NoteRepo noteRepo, UserRepo userRepo) {
+    _noteRepo = noteRepo;
+    _userRepo = userRepo;
   }
 
   Future<void> get(String id) async {
@@ -35,9 +38,12 @@ class NoteDetailViewModel extends ChangeNotifier {
       title: title,
       content: content,
       createdAt: DateTime.now().toString(),
-      idUser: null,
+      idUser: _userRepo.user?.id,
     );
-    await _repo.add(note!);
+    await _noteRepo.addLocal(note!);
+    if (_userRepo.user != null) {
+      await _noteRepo.addRemote(note!);
+    }
     notifyListeners();
   }
 

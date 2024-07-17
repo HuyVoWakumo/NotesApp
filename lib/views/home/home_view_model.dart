@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
+import 'package:notes_app/repositories/user_repo.dart';
 
 final homeProvider = ChangeNotifierProvider(
-  (ref) => HomeViewModel(ref.read(noteRepoProvider))
+  (ref) => HomeViewModel(ref.read(noteRepoProvider), ref.read(userRepoProvider))
 );
 
 class HomeViewModel extends ChangeNotifier {
@@ -17,20 +18,22 @@ class HomeViewModel extends ChangeNotifier {
   ];
 
 
-  late final NoteRepo _repo;
+  late final NoteRepo _noteRepo;
+  late final UserRepo _userRepo;
   List<Note> notes = [];
 
-  HomeViewModel(NoteRepo repo) {
-    _repo = repo;
+  HomeViewModel(NoteRepo noteRepo, UserRepo userRepo) {
+    _noteRepo = noteRepo;
+    _userRepo = userRepo;
   }
 
   Future<void> getAll() async {
-    notes = await _repo.getAll();
+    notes = await _noteRepo.getAll(_userRepo.user?.id);
     notifyListeners();
-  }
+  } 
 
   Future<void> delete(String id) async {
-    // await _repo.delete(id);
+    // await _noteRepo.delete(id);
     // await getAll();
   }
 }

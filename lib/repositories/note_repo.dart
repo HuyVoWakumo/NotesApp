@@ -25,13 +25,16 @@ class NoteRepo {
   }
 
   // add note
-  Future<void> add(Note note) async {
+  Future<void> addLocal(Note note) async {
     await _noteLocal!.add(note);
-    await _noteRemote!.add(note);
   }
 
-  Future<List<Note>> getAll() async {
-    return _noteLocal!.getAll();
+  Future<void> addRemote(Note note) async {
+    await _noteRemote!.add(note);
+  } 
+
+  Future<List<Note>> getAll(String? idUser) async {
+    return _noteLocal!.getAll(idUser);
   }
 
   // // get note

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/search/search_view_model.dart';
-import 'package:notes_app/widgets/note_item.dart';
+import 'package:notes_app/widgets/note_item_widget.dart';
 
 class SearchView extends ConsumerStatefulWidget {
   const SearchView({super.key});
@@ -41,7 +41,7 @@ class _SearchState extends ConsumerState<SearchView> {
               ref.watch(searchViewModel).notes.isNotEmpty
               ? Column(
                 children: ref.watch(searchViewModel).notes.asMap()
-                .map((index, note) => MapEntry(index, NoteItem(
+                .map((index, note) => MapEntry(index, NoteItemWidget(
                   note, backgroundColor: ref.read(searchViewModel).noteBg[index % 5]))).values.toList())
               : const Center(child: Text("No matching notes")),
             ],

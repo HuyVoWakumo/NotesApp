@@ -5,15 +5,15 @@ import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
 import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
 
-class NoteItem extends ConsumerStatefulWidget {
+class NoteItemWidget extends ConsumerStatefulWidget {
   final Note note;
   final Color backgroundColor;
-  const NoteItem(this.note, {this.backgroundColor = Colors.white60, super.key});
+  const NoteItemWidget(this.note, {this.backgroundColor = Colors.white60, super.key});
 
   @override
-  ConsumerState<NoteItem> createState() => _NoteItemState();
+  ConsumerState<NoteItemWidget> createState() => _NoteItemState();
 }
-class _NoteItemState extends ConsumerState<NoteItem> {
+class _NoteItemState extends ConsumerState<NoteItemWidget> {
 
   @override
   Widget build(BuildContext context) {

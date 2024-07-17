@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
 import 'package:notes_app/views/note_detail/note_detail_view_model.dart';
-import 'package:notes_app/widgets/note_item.dart';
+import 'package:notes_app/widgets/note_item_widget.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -30,7 +30,7 @@ class HomeState extends ConsumerState<HomeView> {
       ? const Center(child: Text('Create some notes !'))
       : ListView(
         padding: const EdgeInsets.all(10),
-        children: ref.watch(homeProvider).notes.asMap().map((index, note) => MapEntry(index, NoteItem(note, backgroundColor: ref.read(homeProvider).noteBg[index % 5]))).values.toList(),
+        children: ref.watch(homeProvider).notes.asMap().map((index, note) => MapEntry(index, NoteItemWidget(note, backgroundColor: ref.read(homeProvider).noteBg[index % 5]))).values.toList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

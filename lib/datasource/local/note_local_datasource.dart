@@ -22,9 +22,9 @@ class NoteLocalDatasource {
     return await db.insert('Note', note.toMap());
   }
 
-  Future<List<Note>> getAll() async {
+  Future<List<Note>> getAll(String? idUser) async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note');
+    var res = await db.query('Note', where: ' id_user IS ? ', whereArgs: [idUser]);
     return res.isNotEmpty ? res.map((r) => Note.fromMap(r)).toList() : List.empty();
   }
 
