@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.dark,
         routes: Routes.init(context),
-        initialRoute: '/auth',
+        initialRoute: '/splash',
         debugShowCheckedModeBanner: false,
       ),
     );
