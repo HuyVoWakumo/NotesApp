@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/repositories/user_repo.dart';
 
-final authViewModel = ChangeNotifierProvider(
+final authViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => AuthViewModel(ref.read(userRepoProvider))
 );
 

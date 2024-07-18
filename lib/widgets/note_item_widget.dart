@@ -25,7 +25,7 @@ class _NoteItemState extends ConsumerState<NoteItemWidget> {
           children: [
             SlidableAction(
               onPressed: (context) {
-                ref.read(noteDetailProvider).isReadOnly = true;
+                ref.read(noteDetailViewModel).isReadOnly = true;
                 Navigator.pushNamed(context, '/note-detail', arguments: { 'id' : widget.note.id });
               },
               backgroundColor: const Color.fromARGB(255, 53, 158, 244),
@@ -57,7 +57,7 @@ class _NoteItemState extends ConsumerState<NoteItemWidget> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          ref.read(homeProvider).delete(widget.note.id);
+                          ref.read(homeViewModel).delete(widget.note.id);
                           Navigator.popUntil(context, ModalRoute.withName('/home'));
                         }, 
                         style: ElevatedButton.styleFrom(

@@ -29,4 +29,14 @@ class UserRepo {
     user = authResponse.user;
     log(authResponse.session.toString());
   }
+
+  Future<void> signOut() async {
+    await _userRemote!.signOut();
+    user = null;
+  }
+
+  User? checkCurrentUser() {
+    user = _userRemote!.checkCurrentUser();
+    return user;
+  }
 }

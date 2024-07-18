@@ -27,4 +27,12 @@ class UserRemoteDatasource {
       password: password
     );
   }
+
+  Future<void> signOut() async {
+    await _supabase.auth.signOut();
+  }
+
+  User? checkCurrentUser() {
+    return _supabase.auth.currentUser;
+  }
 }

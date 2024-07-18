@@ -5,7 +5,7 @@ import 'package:notes_app/repositories/note_repo.dart';
 import 'package:notes_app/repositories/user_repo.dart';
 import 'package:uuid/uuid.dart';
 
-final noteDetailProvider = ChangeNotifierProvider(
+final noteDetailViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => NoteDetailViewModel(ref.read(noteRepoProvider), ref.read(userRepoProvider))
 );
 

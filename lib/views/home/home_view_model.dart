@@ -3,8 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
 import 'package:notes_app/repositories/user_repo.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-final homeProvider = ChangeNotifierProvider(
+final homeViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => HomeViewModel(ref.read(noteRepoProvider), ref.read(userRepoProvider))
 );
 
@@ -38,5 +39,13 @@ class HomeViewModel extends ChangeNotifier {
       await _noteRepo.deleteRemote(id);
     }
     await getAll();
+  }
+
+  User? checkCurrentUser() {
+    return _userRepo.checkCurrentUser();
+  }
+
+  Future<void> signOut() async {
+    await _userRepo.signOut();
   }
 }

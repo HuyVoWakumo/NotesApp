@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/auth/auth_view_model.dart';
-import 'package:notes_app/views/auth/widgets/sign_form.dart';
+import 'package:notes_app/views/auth/widgets/sign_form_widget.dart';
 
 class AuthView extends ConsumerWidget {
   const AuthView({super.key});
@@ -15,7 +15,15 @@ class AuthView extends ConsumerWidget {
         children: [
           _title(),
           const SizedBox(height: 50),
-          const SignForm(),
+          SignFormWidget(
+            formKey: ref.read(authViewModel).formKey,
+            emailController: ref.read(authViewModel).emailController,
+            passwordController: ref.read(authViewModel).passwordController,
+            confirmPasswordController: ref.read(authViewModel).confirmPasswordController,
+            isSignin: ref.watch(authViewModel).isSignIn,
+            onSignIn: () => ref.read(authViewModel).signInWithPassword(context),
+            onSignUp: () => ref.read(authViewModel).signUp(context),
+          ),
           const SizedBox(height: 30),
           _otherMethods(ref),
           const SizedBox(height: 100),

@@ -4,7 +4,7 @@ import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/repositories/note_repo.dart';
 import 'package:notes_app/repositories/user_repo.dart';
 
-final searchViewModel = ChangeNotifierProvider(
+final searchViewModel = ChangeNotifierProvider.autoDispose(
   (ref) => SearchViewModel(ref.read(noteRepoProvider), ref.read(userRepoProvider))
 );
 
