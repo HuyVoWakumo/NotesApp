@@ -26,7 +26,12 @@ class HomeState extends ConsumerState<HomeView> {
 
     return Scaffold(
       appBar: _appBar(context),
-      body: _notesZone(),
+      body: Column(
+        children: [
+          _connectionNoti(),
+          _notesZone(),
+        ],
+      ),
       floatingActionButton: _floatingActionButton(),
     );
   }
@@ -111,10 +116,17 @@ class HomeState extends ConsumerState<HomeView> {
     );
   }
 
+  Widget _connectionNoti() {
+    return ref.watch(homeViewModel).hasInternetConnection
+    ? const SizedBox()
+    : const Text('No internet connection....', textAlign: TextAlign.center);
+  }
+
   Widget _notesZone() {
     return ref.watch(homeViewModel).notes.isEmpty
       ? const Center(child: Text('Create some notes !'))
       : ListView(
+        shrinkWrap: true,
         padding: const EdgeInsets.all(10),
         children: ref.watch(homeViewModel).notes.asMap().map((index, note) => MapEntry(index, NoteItemWidget(note, backgroundColor: ref.read(homeViewModel).noteBg[index % 5]))).values.toList(),
     );

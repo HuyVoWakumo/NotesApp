@@ -17,6 +17,14 @@ class NoteRemoteDatasource {
     return _instance;
   }
 
+  // get all note
+  Future<List<Note>> getAll(String idUser) async {
+    return await _supabase.from('notes')
+    .select()
+    .eq('id_user', idUser)
+    .then((value) => value.map((noteJson) => Note.fromMap(noteJson)).toList());
+  }
+
   // add note
   Future<void> add(Note note) async {
     await _supabase.from('notes')
@@ -29,7 +37,8 @@ class NoteRemoteDatasource {
     await _supabase.from('notes')
     .update({
       'title': note.title,
-      'content': note.content
+      'content': note.content,
+      'created_at': note.createdAt
     }).eq('id', note.id);
   }
 

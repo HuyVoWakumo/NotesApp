@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/models/note_model.dart';
@@ -18,14 +22,28 @@ class HomeViewModel extends ChangeNotifier {
     Color.fromRGBO(158, 255, 255, 1),
   ];
 
-
   late final NoteRepo _noteRepo;
   late final UserRepo _userRepo;
+  late final StreamSubscription<List<ConnectivityResult>> _internetSubscription;
   List<Note> notes = [];
+  bool hasInternetConnection = false;
 
   HomeViewModel(NoteRepo noteRepo, UserRepo userRepo) {
     _noteRepo = noteRepo;
     _userRepo = userRepo;
+    _internetSubscription
+      = Connectivity().onConnectivityChanged.listen(
+        (List<ConnectivityResult> result) {
+          if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
+            hasInternetConnection = true;
+            notifyListeners();
+            log('Has internet connection');
+          } else if (result.contains(ConnectivityResult.none)) {
+            hasInternetConnection = false;
+            notifyListeners();
+            log('No internet connection');
+          }
+    });
   }
 
   Future<void> getAll() async {

@@ -13,12 +13,10 @@ final noteRepoProvider = Provider<NoteRepo>(
 class NoteRepo {
   NoteRepo._();
   static final NoteRepo _instance = NoteRepo._();
-  // static MyDatabase? _myDatabase;
   static NoteLocalDatasource? _noteLocal;
   static NoteRemoteDatasource? _noteRemote;
 
   factory NoteRepo(NoteLocalDatasource noteLocal, NoteRemoteDatasource noteRemote) {
-    // _myDatabase = myDatabase;
     _noteLocal = noteLocal;
     _noteRemote = noteRemote;
     return _instance;
@@ -67,5 +65,4 @@ class NoteRepo {
   Future<List<Note>> filter(String title, String? idUser) async {
     return await _noteLocal!.filter(title, idUser);
   }
-
 }
