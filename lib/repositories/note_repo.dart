@@ -64,8 +64,8 @@ class NoteRepo {
   }
 
   // filter note 
-  Future<List<Note>> filter(String title) async {
-    return await _noteLocal!.filter(title);
+  Future<List<Note>> filter(String title, String? idUser) async {
+    return await _noteLocal!.filter(title, idUser);
   }
 
 }
