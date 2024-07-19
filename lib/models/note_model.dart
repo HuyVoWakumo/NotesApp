@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Note {
   String id;
   String title;
@@ -23,4 +22,10 @@ class Note {
     'created_at': createdAt,
     'id_user': idUser
   };
+
+  void assign (Note other) {
+    title = other.title;
+    content = other.content;
+    createdAt = other.createdAt;
+  }
 }

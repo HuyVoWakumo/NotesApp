@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
@@ -26,19 +28,20 @@ class HomeState extends ConsumerState<HomeView> {
 
     return Scaffold(
       appBar: _appBar(context),
-      body: Column(
-        children: [
-          _connectionNoti(),
-          _notesZone(),
-        ],
-      ),
+      body: _notesZone(),
       floatingActionButton: _floatingActionButton(),
     );
   }
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: const Text('Notes', style: TextStyle(fontSize: 20)),
+      title: const Text('Notes', style: TextStyle(fontSize: 30)),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(14), 
+        child: ref.read(homeViewModel).hasInternetConnection 
+        ? const SizedBox()
+        : const Text('No internet connection....', textAlign: TextAlign.center, style: TextStyle(fontSize: 14))
+      ),
       actions: [
         _searchNavBtn(context),
         _accountBtn(context),
@@ -116,20 +119,21 @@ class HomeState extends ConsumerState<HomeView> {
     );
   }
 
-  Widget _connectionNoti() {
-    return ref.watch(homeViewModel).hasInternetConnection
-    ? const SizedBox()
-    : const Text('No internet connection....', textAlign: TextAlign.center);
-  }
-
   Widget _notesZone() {
     return ref.watch(homeViewModel).notes.isEmpty
       ? const Center(child: Text('Create some notes !'))
-      : ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(10),
-        children: ref.watch(homeViewModel).notes.asMap().map((index, note) => MapEntry(index, NoteItemWidget(note, backgroundColor: ref.read(homeViewModel).noteBg[index % 5]))).values.toList(),
-    );
+      : RefreshIndicator(
+        onRefresh: () async => await ref.read(homeViewModel).refresh(),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: ref.read(homeViewModel).notes.length,
+          itemBuilder: (context, index) 
+          => ref.watch(homeViewModel).notes.asMap()
+            .map((index, note) => MapEntry(index, NoteItemWidget(
+              note, 
+              backgroundColor: ref.read(homeViewModel).noteBg[index % 5]))).values.elementAt(index)
+            ),
+      );
   }
 
   FloatingActionButton _floatingActionButton() {

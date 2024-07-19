@@ -24,7 +24,7 @@ class NoteLocalDatasource {
 
   Future<List<Note>> getAll(String? idUser) async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note', where: ' id_user IS ? ', whereArgs: [idUser]);
+    var res = await db.query('Note', where: ' id_user IS ? ', whereArgs: [idUser], orderBy: 'created_at', );
     return res.isNotEmpty ? res.map((r) => Note.fromMap(r)).toList() : List.empty();
   }
 
@@ -52,5 +52,19 @@ class NoteLocalDatasource {
   Future<void> delete(String id) async {
     final db = await _myDatabase!.db;
     await db.delete('Note', where: ' id = ? ', whereArgs: [id]);
+  }
+
+  // upsert note
+  Future<void> upsert(Note note) async {
+    final db = await _myDatabase!.db;
+    await db.rawInsert(
+      'INSERT INTO Note (id, title, content, created_at, id_user) '
+      'VALUES (?, ?, ?, ?, ?) '
+      'ON CONFLICT(id) DO UPDATE SET '
+      ' title=excluded.title, '
+      ' content=excluded.content, '
+      ' created_at=excluded.created_at',
+      [note.id, note.title, note.content, note.createdAt, note.idUser]
+    );
   }
 }

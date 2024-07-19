@@ -26,18 +26,21 @@ class HomeViewModel extends ChangeNotifier {
   late final UserRepo _userRepo;
   late final StreamSubscription<List<ConnectivityResult>> _internetSubscription;
   List<Note> notes = [];
-  bool hasInternetConnection = false;
+  bool hasInternetConnection = true;
 
   HomeViewModel(NoteRepo noteRepo, UserRepo userRepo) {
     _noteRepo = noteRepo;
     _userRepo = userRepo;
     _internetSubscription
       = Connectivity().onConnectivityChanged.listen(
-        (List<ConnectivityResult> result) {
+        (List<ConnectivityResult> result) async {
           if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
             hasInternetConnection = true;
-            notifyListeners();
             log('Has internet connection');
+            if (_userRepo.user != null) {
+              notes = await _noteRepo.sync(_userRepo.user!.id);
+            }
+            notifyListeners();
           } else if (result.contains(ConnectivityResult.none)) {
             hasInternetConnection = false;
             notifyListeners();
@@ -47,16 +50,21 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> getAll() async {
-    notes = await _noteRepo.getAll(_userRepo.user?.id);
+    notes = await _noteRepo.getAllLocal(_userRepo.user?.id);
     notifyListeners();
   } 
 
   Future<void> delete(String id) async {
-    await _noteRepo.deleteLocal(id);
-    if (_userRepo.user != null) {
-      await _noteRepo.deleteRemote(id);
+    try {
+      await _noteRepo.deleteLocal(id);
+      if (_userRepo.user != null) {
+        await _noteRepo.deleteRemote(id);
+      }
+    } catch (err) {
+      log(err.toString());
+    } finally {
+      await getAll();
     }
-    await getAll();
   }
 
   User? checkCurrentUser() {
@@ -65,5 +73,12 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _userRepo.signOut();
+  }
+
+  Future<void> refresh() async {
+    if (_userRepo.user != null) {
+      notes = await _noteRepo.sync(_userRepo.user!.id);
+    }
+    notifyListeners();
   }
 }

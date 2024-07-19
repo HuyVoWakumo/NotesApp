@@ -22,6 +22,7 @@ class NoteRemoteDatasource {
     return await _supabase.from('notes')
     .select()
     .eq('id_user', idUser)
+    .order('created_at')
     .then((value) => value.map((noteJson) => Note.fromMap(noteJson)).toList());
   }
 
@@ -47,5 +48,11 @@ class NoteRemoteDatasource {
     await _supabase.from('notes')
     .delete()
     .eq('id', id);
+  }
+
+  // upsert note
+  Future<void> upsert(Note note) async {
+    await _supabase.from('notes')
+    .upsert(note.toMap());
   }
 }
