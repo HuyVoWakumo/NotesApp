@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
@@ -45,6 +43,7 @@ class HomeState extends ConsumerState<HomeView> {
       actions: [
         _searchNavBtn(context),
         _accountBtn(context),
+        // _archiveNavBtn(context),
         _appInfoBtn(context),
       ],
     );
@@ -94,6 +93,15 @@ class HomeState extends ConsumerState<HomeView> {
     );
   }
   
+  // Widget _archiveNavBtn(BuildContext context) {
+  //   return IconButton(
+  //     onPressed: () {
+  //       Navigator.pushNamed(context, '/archive');
+  //     },
+  //     icon: const Icon(Icons.store),
+  //   );
+  // }
+
   Widget _appInfoBtn(BuildContext context) {
     return IconButton(
       onPressed: () {
@@ -123,7 +131,7 @@ class HomeState extends ConsumerState<HomeView> {
     return ref.watch(homeViewModel).notes.isEmpty
       ? const Center(child: Text('Create some notes !'))
       : RefreshIndicator(
-        onRefresh: () async => await ref.read(homeViewModel).refresh(),
+        onRefresh: () async => await ref.read(homeViewModel).getAll(),
         child: ListView.builder(
           padding: const EdgeInsets.all(10),
           itemCount: ref.read(homeViewModel).notes.length,

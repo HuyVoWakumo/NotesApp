@@ -57,7 +57,7 @@ class _NoteItemState extends ConsumerState<NoteItemWidget> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          ref.read(homeViewModel).delete(widget.note.id);
+                          ref.read(homeViewModel).archive(widget.note.id);
                           Navigator.popUntil(context, ModalRoute.withName('/home'));
                         }, 
                         style: ElevatedButton.styleFrom(

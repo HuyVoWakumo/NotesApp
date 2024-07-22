@@ -27,7 +27,7 @@ class AuthViewModel extends ChangeNotifier {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Sign up failed')
+        content: Text('Sign in failed')
       ));
     }
   }   
@@ -39,7 +39,9 @@ class AuthViewModel extends ChangeNotifier {
           emailController.text, 
           passwordController.text
         );
-        Navigator.pushReplacementNamed(context, '/home');
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Sign up successfully, please verify email!')
+        ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Passwords not match')

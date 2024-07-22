@@ -2,30 +2,52 @@ class Note {
   String id;
   String title;
   String content;
-  String createdAt;
+  String updatedAt;
   String? idUser;
+  bool isTrash;
 
-  Note({required this.id, required this.title, required this.content, required this.createdAt, this.idUser});
+  Note({required this.id, required this.title, required this.content, required this.updatedAt, this.idUser, required this.isTrash});
 
-  factory Note.fromMap(Map<String, dynamic> json) => Note(
+  factory Note.fromMapLocal(Map<String, dynamic> json) => Note(
     id: json['id'].toString(),
     title: json['title'],
     content: json['content'],
-    createdAt: json['created_at'] ?? '',
-    idUser: json['id_user'],
+    updatedAt: json['updated_at'] ?? '',
+    idUser: json['id_user'] ?? '',
+    isTrash: json['is_trash'] == 1
   );
 
-  Map<String, dynamic> toMap() => {
+  factory Note.fromMapRemote(Map<String, dynamic> json) => Note(
+    id: json['id'].toString(),
+    title: json['title'],
+    content: json['content'],
+    updatedAt: json['updated_at'] ?? '',
+    idUser: json['id_user'],
+    isTrash: json['is_trash'] 
+  );
+
+  Map<String, dynamic> toMapLocal() => {
     'id': id,
     'title': title,
     'content': content,
-    'created_at': createdAt,
-    'id_user': idUser
+    'updated_at': updatedAt,
+    'id_user': idUser,
+    'is_trash': isTrash ? 1 : 0,
+  };
+
+  Map<String, dynamic> toMapRemote() => {
+    'id': id,
+    'title': title,
+    'content': content,
+    'updated_at': updatedAt,
+    'id_user': idUser,
+    'is_trash': isTrash,
   };
 
   void assign (Note other) {
     title = other.title;
     content = other.content;
-    createdAt = other.createdAt;
+    updatedAt = other.updatedAt;
+    isTrash = other.isTrash;
   }
 }

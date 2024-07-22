@@ -22,25 +22,40 @@ class NoteRemoteDatasource {
     return await _supabase.from('notes')
     .select()
     .eq('id_user', idUser)
-    .order('created_at')
-    .then((value) => value.map((noteJson) => Note.fromMap(noteJson)).toList());
+    .eq('is_trash', false)
+    .order('updated_at')
+    .then((value) => value.map((noteJson) => Note.fromMapRemote(noteJson)).toList());
+  }
+
+  Future<List<Note>> getAllArchive(String idUser) async {
+    return await _supabase.from('notes')
+    .select()
+    .eq('id_user', idUser)
+    .eq('is_trash', true)
+    .order('updated_at')
+    .then((value) => value.map((noteJson) => Note.fromMapRemote(noteJson)).toList());
   }
 
   // add note
   Future<void> add(Note note) async {
     await _supabase.from('notes')
-    .insert(note.toMap())
+    .insert(note.toMapRemote())
     .then((value) => log('Inserted supabase'));
   }
 
   // edit note
   Future<void> update(Note note) async {
     await _supabase.from('notes')
+    .update(note.toMapRemote())
+    .eq('id', note.id);
+  }
+
+  Future<void> archive(String id) async {
+    await _supabase.from('notes')
     .update({
-      'title': note.title,
-      'content': note.content,
-      'created_at': note.createdAt
-    }).eq('id', note.id);
+      'is_trash': true,
+      'updated_at': DateTime.now().toString()
+    }).eq('id', id);
   }
 
   // delete note
@@ -53,6 +68,6 @@ class NoteRemoteDatasource {
   // upsert note
   Future<void> upsert(Note note) async {
     await _supabase.from('notes')
-    .upsert(note.toMap());
+    .upsert(note.toMapRemote());
   }
 }
