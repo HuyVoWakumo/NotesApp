@@ -9,15 +9,9 @@ final noteRemoteProvider = Provider<NoteRemoteDatasource>(
 );
 
 class NoteRemoteDatasource {
-  NoteRemoteDatasource._();
-  static final NoteRemoteDatasource _instance = NoteRemoteDatasource._();
   final _supabase = Supabase.instance.client;
 
-  factory NoteRemoteDatasource() {
-    return _instance;
-  }
-
-  // get all note
+  /// get all note
   Future<List<Note>> getAll(String idUser) async {
     return await _supabase.from('notes')
     .select()

@@ -9,13 +9,10 @@ final userRepoProvider = Provider<UserRepo>(
 );
 
 class UserRepo {
-  UserRepo._();
-  static final UserRepo _instance = UserRepo._();
   static UserRemoteDatasource? _userRemote;
   User? user;
-  factory UserRepo(UserRemoteDatasource userRemote) {
+  UserRepo(UserRemoteDatasource userRemote) {
     _userRemote = userRemote;
-    return _instance;
   }
 
   Future<void> signInWithPassword(String email, String password) async {

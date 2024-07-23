@@ -6,13 +6,7 @@ final userRemoteProvider = Provider<UserRemoteDatasource>(
 );
 
 class UserRemoteDatasource {
-  UserRemoteDatasource._();
-  static final UserRemoteDatasource _instance = UserRemoteDatasource._();
   final _supabase = Supabase.instance.client;
-
-  factory UserRemoteDatasource() {
-    return _instance;
-  }
 
   Future<AuthResponse> signInWithPassword(String email, String password) async {
     return await _supabase.auth.signInWithPassword(

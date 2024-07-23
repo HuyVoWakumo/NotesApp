@@ -13,15 +13,12 @@ final noteRepoProvider = Provider<NoteRepo>(
 );
 
 class NoteRepo {
-  NoteRepo._();
-  static final NoteRepo _instance = NoteRepo._();
   static NoteLocalDatasource? _noteLocal;
   static NoteRemoteDatasource? _noteRemote;
 
-  factory NoteRepo(NoteLocalDatasource noteLocal, NoteRemoteDatasource noteRemote) {
+  NoteRepo(NoteLocalDatasource noteLocal, NoteRemoteDatasource noteRemote) {
     _noteLocal = noteLocal;
     _noteRemote = noteRemote;
-    return _instance;
   }
 
   // add note to sqflite 

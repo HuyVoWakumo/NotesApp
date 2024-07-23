@@ -7,13 +7,10 @@ final noteLocalProvider = Provider<NoteLocalDatasource>(
 );
 
 class NoteLocalDatasource {
-  NoteLocalDatasource._();
-  static final NoteLocalDatasource _instance = NoteLocalDatasource._();
   static MyDatabase? _myDatabase;
 
-  factory NoteLocalDatasource(MyDatabase myDatabase) {
+  NoteLocalDatasource(MyDatabase myDatabase) {
     _myDatabase = myDatabase;
-    return _instance;
   }
 
   // add note
