@@ -8,7 +8,7 @@ class Note {
 
   Note({required this.id, required this.title, required this.content, required this.updatedAt, this.idUser, required this.isTrash});
 
-  factory Note.fromMapLocal(Map<String, dynamic> json) => Note(
+  factory Note.fromLocalJson(Map<String, dynamic> json) => Note(
     id: json['id'].toString(),
     title: json['title'],
     content: json['content'],
@@ -17,7 +17,7 @@ class Note {
     isTrash: json['is_trash'] == 1
   );
 
-  factory Note.fromMapRemote(Map<String, dynamic> json) => Note(
+  factory Note.fromRemoteJson(Map<String, dynamic> json) => Note(
     id: json['id'].toString(),
     title: json['title'],
     content: json['content'],
@@ -26,7 +26,7 @@ class Note {
     isTrash: json['is_trash'] 
   );
 
-  Map<String, dynamic> toMapLocal() => {
+  Map<String, dynamic> toLocalJson() => {
     'id': id,
     'title': title,
     'content': content,
@@ -35,7 +35,7 @@ class Note {
     'is_trash': isTrash ? 1 : 0,
   };
 
-  Map<String, dynamic> toMapRemote() => {
+  Map<String, dynamic> toRemoteJson() => {
     'id': id,
     'title': title,
     'content': content,

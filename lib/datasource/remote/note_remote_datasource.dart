@@ -18,7 +18,7 @@ class NoteRemoteDatasource {
     .eq('id_user', idUser)
     .eq('is_trash', false)
     .order('updated_at')
-    .then((value) => value.map((noteJson) => Note.fromMapRemote(noteJson)).toList());
+    .then((value) => value.map((noteJson) => Note.fromRemoteJson(noteJson)).toList());
   }
 
   Future<List<Note>> getAllArchive(String idUser) async {
@@ -27,20 +27,20 @@ class NoteRemoteDatasource {
     .eq('id_user', idUser)
     .eq('is_trash', true)
     .order('updated_at')
-    .then((value) => value.map((noteJson) => Note.fromMapRemote(noteJson)).toList());
+    .then((value) => value.map((noteJson) => Note.fromRemoteJson(noteJson)).toList());
   }
 
   // add note
   Future<void> add(Note note) async {
     await _supabase.from('notes')
-    .insert(note.toMapRemote())
+    .insert(note.toRemoteJson())
     .then((value) => log('Inserted supabase'));
   }
 
   // edit note
   Future<void> update(Note note) async {
     await _supabase.from('notes')
-    .update(note.toMapRemote())
+    .update(note.toRemoteJson())
     .eq('id', note.id);
   }
 
@@ -62,6 +62,6 @@ class NoteRemoteDatasource {
   // upsert note
   Future<void> upsert(Note note) async {
     await _supabase.from('notes')
-    .upsert(note.toMapRemote());
+    .upsert(note.toRemoteJson());
   }
 }

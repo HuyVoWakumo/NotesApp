@@ -16,39 +16,39 @@ class NoteLocalDatasource {
   // add note
   Future<void> add(Note note) async {
     final db = await _myDatabase!.db;
-    await db.insert('Note', note.toMapLocal());
+    await db.insert('Note', note.toLocalJson());
   }
 
   Future<List<Note>> getAll(String? idUser) async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: ' id_user IS ? and is_trash = ? ', whereArgs: [idUser, 0], orderBy: 'updated_at');
-    return res.isNotEmpty ? res.map((r) => Note.fromMapLocal(r)).toList() : List.empty();
+    return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
   Future<List<Note>> getAllArchive(String? idUser) async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: ' id_user IS ? and is_trash = ? ', whereArgs: [idUser, 1], orderBy: 'updated_at');
-    return res.isNotEmpty ? res.map((r) => Note.fromMapLocal(r)).toList() : List.empty();
+    return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
   // get note
   Future<Note?> get(String id) async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: ' id = ? ', whereArgs: [id]);
-    return res.isNotEmpty ? Note.fromMapLocal(res.first) : null;
+    return res.isNotEmpty ? Note.fromLocalJson(res.first) : null;
   }
 
   // filter note 
   Future<List<Note>> filter(String title, String? idUser) async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: ' title LIKE ? AND id_user IS ? AND is_trash = ? ', whereArgs: ['%$title%', idUser, 0]);
-    return res.isNotEmpty ? res.map((r) => Note.fromMapLocal(r)).toList() : List.empty();
+    return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
   // edit note
   Future<void> update(Note note) async {
     final db = await _myDatabase!.db;
-    await db.update('Note', note.toMapLocal(), where: ' id = ? ', whereArgs: [note.id]);
+    await db.update('Note', note.toLocalJson(), where: ' id = ? ', whereArgs: [note.id]);
   }
 
   Future<void> archive(String id) async {
