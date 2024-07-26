@@ -19,13 +19,19 @@ class AuthViewModel extends ChangeNotifier {
   }
   
   Future<void> signInWithPassword(BuildContext context) async {
-    if(formKey.currentState!.validate()) {
-      await _userRepo.signInWithPassword(
-        emailController.text, 
-        passwordController.text
-      );
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
+    try {
+      if(formKey.currentState!.validate()) {
+        await _userRepo.signInWithPassword(
+          emailController.text, 
+          passwordController.text
+        );
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Sign in failed')
+        ));
+      }
+    } catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Sign in failed')
       ));
@@ -33,21 +39,25 @@ class AuthViewModel extends ChangeNotifier {
   }   
   
   Future<void> signUp(BuildContext context) async {
-    if(formKey.currentState!.validate()) {
-      if (passwordController.text == confirmPasswordController.text) {
-        await _userRepo.signUp(
-          emailController.text, 
-          passwordController.text
-        );
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Sign up successfully, please verify email!')
-        ));
+    try {
+      if(formKey.currentState!.validate()) {
+        if (passwordController.text == confirmPasswordController.text) {
+          await _userRepo.signUp(
+            emailController.text, 
+            passwordController.text
+          );
+          Navigator.pushReplacementNamed(context, '/home');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Passwords not match')
+          ));
+        } 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Passwords not match')
+          content: Text('Sign up failed')
         ));
-      } 
-    } else {
+      }
+    } catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Sign up failed')
       ));

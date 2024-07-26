@@ -83,6 +83,19 @@ class NoteDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> archive(String id) async {
+    try {
+      await _noteRepo.archiveLocal(id);
+      if (_userRepo.user != null && hasInternetConnection) {
+        await _noteRepo.archiveRemote(id);
+      }
+      note = null;
+      notifyListeners();
+    } catch(err) {
+      log(err.toString());
+    } 
+  }
+
   void toggleEdit() {
     isReadOnly = !isReadOnly;
     notifyListeners();

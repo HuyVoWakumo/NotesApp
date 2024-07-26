@@ -16,8 +16,7 @@ class NoteRemoteDatasource {
     return await _supabase.from('notes')
     .select()
     .eq('id_user', idUser)
-    .eq('is_trash', false)
-    .order('updated_at')
+    .order('updated_at', ascending: true)
     .then((value) => value.map((noteJson) => Note.fromRemoteJson(noteJson)).toList());
   }
 
@@ -26,7 +25,7 @@ class NoteRemoteDatasource {
     .select()
     .eq('id_user', idUser)
     .eq('is_trash', true)
-    .order('updated_at')
+    .order('updated_at', ascending: true)
     .then((value) => value.map((noteJson) => Note.fromRemoteJson(noteJson)).toList());
   }
 

@@ -51,7 +51,8 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> getAll() async {
     if (_userRepo.user == null || !hasInternetConnection) {
-      notes = await _noteRepo.getAllLocal(_userRepo.user?.id);
+      log('Local');
+      notes = await _noteRepo.getAllNotArchiveLocal();
     } else {
       await sync();
     }
@@ -62,18 +63,7 @@ class HomeViewModel extends ChangeNotifier {
     notes = await _noteRepo.sync(_userRepo.user!.id);
   }
 
-  Future<void> archive(String id) async {
-    try {
-      await _noteRepo.archiveLocal(id);
-      if (_userRepo.user != null && hasInternetConnection) {
-        await _noteRepo.archiveRemote(id);
-      }
-    } catch(err) {
-      log(err.toString());
-    } finally {
-      await getAll();
-    }
-  }
+  
 
   // Future<void> delete(String id) async {
   //   try {

@@ -43,7 +43,8 @@ class _NoteDetailState extends ConsumerState<NoteDetailView> {
       title: const Text('Note', style: TextStyle(fontSize: 20)),
       actions: [  
         _toggleEditBtn(),
-        _saveBtn()
+        _saveBtn(),
+        _deleteBtn(),
       ],
     );
   }
@@ -85,6 +86,53 @@ class _NoteDetailState extends ConsumerState<NoteDetailView> {
           }},
         icon: const Icon(Icons.save)
       )
+    );
+  }
+
+  Widget _deleteBtn() {
+    return Visibility(
+      visible: widget.id != null && !ref.read(noteDetailViewModel).isReadOnly,
+      child: IconButton(
+        onPressed: () {
+          showDialog(
+            context: context, 
+            builder: (context) => AlertDialog(
+              alignment: Alignment.center,
+              title: const Icon(Icons.warning),
+              content: const Text('Confirm delete ?', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+              actionsAlignment: MainAxisAlignment.spaceAround,
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
+                    backgroundColor: const Color.fromARGB(241, 243, 74, 62),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                  ),
+                  child: const Text("Discard"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.read(noteDetailViewModel).archive(widget.id!);
+                    Navigator.popUntil(context, ModalRoute.withName('/home'));
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.only(top: 2, bottom: 2, left: 6, right: 6),
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+                  ),
+                  child: const Text("Delete"),
+                ),
+              ],
+            )
+          );
+        },
+        icon: const Icon(Icons.delete)
+      ),
     );
   }
 

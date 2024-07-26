@@ -15,12 +15,13 @@ class HomeState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
+    ref.read(homeViewModel).checkCurrentUser();
     ref.read(homeViewModel).getAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(noteDetailViewModel.select((p) => p.note), (previous, next) {
+    ref.listen(noteDetailViewModel, (previous, next) {
       ref.read(homeViewModel).getAll();
     });
 
@@ -67,7 +68,7 @@ class HomeState extends ConsumerState<HomeView> {
             return AlertDialog(
               content: Text(
                 ref.read(homeViewModel).checkCurrentUser() == null 
-                ? 'Not sign in'
+                ? 'Sign in to sync'
                 : ref.read(homeViewModel).checkCurrentUser()!.email!
               ),
               actions: [
@@ -78,7 +79,7 @@ class HomeState extends ConsumerState<HomeView> {
                   }
                   : () {
                     ref.read(homeViewModel).signOut();
-                    Navigator.pushNamedAndRemoveUntil(context, '/auth', (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                   }, 
                   child: Text(
                     ref.read(homeViewModel).checkCurrentUser() == null

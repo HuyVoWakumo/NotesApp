@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/database.dart';
 import 'package:notes_app/models/note_model.dart';
@@ -19,15 +21,16 @@ class NoteLocalDatasource {
     await db.insert('Note', note.toLocalJson());
   }
 
-  Future<List<Note>> getAll(String? idUser) async {
+  Future<List<Note>> getAll() async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note', where: ' id_user IS ? and is_trash = ? ', whereArgs: [idUser, 0], orderBy: 'updated_at');
+    var res = await db.query('Note', where: ' id_user IS NULL ', orderBy: 'updated_at DESC');
     return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
-  Future<List<Note>> getAllArchive(String? idUser) async {
+  Future<List<Note>> getAllNotArchive() async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note', where: ' id_user IS ? and is_trash = ? ', whereArgs: [idUser, 1], orderBy: 'updated_at');
+    var res = await db.query('Note', where: ' is_trash = ? ', whereArgs: [0], orderBy: 'updated_at DESC');
+    log(res.toString());
     return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
@@ -53,6 +56,7 @@ class NoteLocalDatasource {
 
   Future<void> archive(String id) async {
     final db = await _myDatabase!.db;
+    log('archive local');
     await db.update('Note', {'is_trash': 1, 'updated_at': DateTime.now().toString() }, where: ' id = ? ', whereArgs: [id]);
   }
 

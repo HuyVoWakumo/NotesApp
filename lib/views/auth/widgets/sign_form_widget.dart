@@ -28,7 +28,7 @@ class SignFormWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
-            validator: validateEmpty,
+            validator: validateEmail,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: emailController,
             decoration: InputDecoration(
@@ -42,7 +42,7 @@ class SignFormWidget extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           PasswordTextFieldWidget(
-            validator: validateEmpty,
+            validator: validatePassword,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: passwordController,
             label: const Text('Password'),
@@ -54,7 +54,7 @@ class SignFormWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 PasswordTextFieldWidget(
-                  validator: validateEmpty,
+                  validator: validatePassword,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   controller: confirmPasswordController,
                   label: const Text('Confirm password'),

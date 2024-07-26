@@ -49,5 +49,6 @@ class Note {
     content = other.content;
     updatedAt = other.updatedAt;
     isTrash = other.isTrash;
+    idUser = other.idUser;
   }
 }

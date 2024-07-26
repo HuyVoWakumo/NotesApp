@@ -31,16 +31,19 @@ class NoteRepo {
     await _noteRemote!.add(note);
   } 
 
-  Future<List<Note>> getAllLocal(String? idUser) async {
-    return await _noteLocal!.getAll(idUser);
+  Future<List<Note>> getAllLocal() async {
+    return await _noteLocal!.getAll();
   }
 
   Future<List<Note>> getAllRemote(String idUser) async {
     return await _noteRemote!.getAll(idUser);
   }
 
-  Future<List<Note>> getAllArchiveLocal(String? idUser) async {
-    return await _noteLocal!.getAllArchive(idUser);
+  Future<List<Note>> getAllNotArchiveLocal() async {
+    final notes = await _noteLocal!.getAllNotArchive();
+    notes.sort((a,b) => DateTime.parse(b.updatedAt).compareTo(DateTime.parse(a.updatedAt)));
+    log(notes.map((note) => note.toLocalJson()).toString());
+    return notes;
   }
 
   Future<List<Note>> getAllArchiveRemote(String idUser) async {
@@ -90,41 +93,51 @@ class NoteRepo {
   /// Fetch all notes by each user from local and remote
   /// and merge them into one, by time priority
   Future<List<Note>> sync(String idUser) async {
-    List<Note> notesByUser = 
-      await getAllArchiveRemote(idUser) +
+    log('IdUser: $idUser');
+    List<Note> notes = 
       await getAllRemote(idUser) + 
-      await getAllArchiveLocal(idUser) +
-      await getAllLocal(idUser);
-    for (Note note in notesByUser) {
+      await getAllLocal();
+    for (Note note in notes) {
       if (note.updatedAt.contains('+')) {
         note.updatedAt = note.updatedAt.substring(0, note.updatedAt.indexOf('+'));
       }
-      log(note.updatedAt);
-    }
-  
-    List<Note> mergedNotes = [];
-
-    while(notesByUser.isNotEmpty) {
-      Note newNote = notesByUser.removeLast();
-      try {
-        Note currentNote = mergedNotes.firstWhere((note) => note.id == newNote.id);
-        DateTime currentNoteTime = DateTime.parse(currentNote.updatedAt);
-        DateTime newNoteTime = DateTime.parse(newNote.updatedAt);
-        if(newNoteTime.isAfter(currentNoteTime)) {
-          currentNote.assign(newNote);
-        } 
-      } on StateError catch (_) {
-        mergedNotes.add(newNote);
+      if (note.updatedAt.contains('T')) {
+        note.updatedAt.replaceAll('T', ' ');
+      }
+      if (note.idUser == null || note.idUser == '') {
+        note.idUser = idUser;
       }
     }
+    log("Notes");
+    for (var note in notes) {
+      log(note.toLocalJson().toString());
+    }
+    List<Note> mergedNotes = [];
+    await Future.sync(() {
 
-    log(mergedNotes.length.toString());
+      while(notes.isNotEmpty) {
+        Note newNote = notes.removeLast();
+        try {
+          Note currentNote = mergedNotes.firstWhere((note) => note.id == newNote.id);
+          if (currentNote.isTrash) continue;
+          DateTime currentNoteTime = DateTime.parse(currentNote.updatedAt);
+          DateTime newNoteTime = DateTime.parse(newNote.updatedAt);
+          if(newNoteTime.isAfter(currentNoteTime)) {
+            currentNote.assign(newNote);
+          } 
+        } on StateError catch (_) {
+          mergedNotes.add(newNote);
+        }
+      }
+    });
+    mergedNotes.sort((a,b) => DateTime.parse(b.updatedAt).compareTo(DateTime.parse(a.updatedAt)));
+    // log(mergedNotes.map((note) => note.toLocalJson()).toString());
     for(Note note in mergedNotes) {
+      log(note.toLocalJson().toString());
       _noteLocal!.upsert(note);
       _noteRemote!.upsert(note);
     }
     log('Sync completed');
-    log(mergedNotes.map((note) => note.isTrash).toString());
     return mergedNotes.where((note) => note.isTrash == false).toList();
   }
 }
