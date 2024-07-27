@@ -98,11 +98,11 @@ class NoteRepo {
       await getAllRemote(idUser) + 
       await getAllLocal();
     for (Note note in notes) {
-      if (note.updatedAt.contains('+')) {
-        note.updatedAt = note.updatedAt.substring(0, note.updatedAt.indexOf('+'));
-      }
       if (note.updatedAt.contains('T')) {
         note.updatedAt.replaceAll('T', ' ');
+      }
+      if (note.updatedAt.contains('+')) {
+        note.updatedAt = note.updatedAt.substring(0, note.updatedAt.indexOf('+'));
       }
       if (note.idUser == null || note.idUser == '') {
         note.idUser = idUser;
@@ -113,7 +113,7 @@ class NoteRepo {
       log(note.toLocalJson().toString());
     }
     List<Note> mergedNotes = [];
-    await Future.sync(() {
+    // await Future.sync(() {
 
       while(notes.isNotEmpty) {
         Note newNote = notes.removeLast();
@@ -129,7 +129,7 @@ class NoteRepo {
           mergedNotes.add(newNote);
         }
       }
-    });
+    // });
     mergedNotes.sort((a,b) => DateTime.parse(b.updatedAt).compareTo(DateTime.parse(a.updatedAt)));
     // log(mergedNotes.map((note) => note.toLocalJson()).toString());
     for(Note note in mergedNotes) {
