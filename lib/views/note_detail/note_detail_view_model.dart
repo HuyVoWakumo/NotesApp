@@ -25,23 +25,24 @@ class NoteDetailViewModel extends ChangeNotifier {
   late final StreamSubscription<List<ConnectivityResult>> internetSubscription;
   Note? note;
   bool hasInternetConnection = true;
+  bool isChange = false;
 
   NoteDetailViewModel(NoteRepo noteRepo, UserRepo userRepo) {
     _noteRepo = noteRepo;
     _userRepo = userRepo;
-    internetSubscription
-      = Connectivity().onConnectivityChanged.listen(
-        (List<ConnectivityResult> result) async {
-          if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
-            hasInternetConnection = true;
-            log('Has internet connection');
-            notifyListeners();
-          } else if (result.contains(ConnectivityResult.none)) {
-            hasInternetConnection = false;
-            notifyListeners();
-            log('No internet connection');
-          }
-    });
+    // internetSubscription
+    //   = Connectivity().onConnectivityChanged.listen(
+    //     (List<ConnectivityResult> result) async {
+    //       if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
+    //         hasInternetConnection = true;
+    //         log('Has internet connection');
+    //         notifyListeners();
+    //       } else if (result.contains(ConnectivityResult.none)) {
+    //         hasInternetConnection = false;
+    //         notifyListeners();
+    //         log('No internet connection');
+    //       }
+    // });
   }
 
   Future<void> get(String id) async {
@@ -64,6 +65,8 @@ class NoteDetailViewModel extends ChangeNotifier {
     if (_userRepo.user != null && hasInternetConnection) {
       await _noteRepo.addRemote(note!);
     }
+    log('Add');
+    isChange = true;
     notifyListeners();
   }
 
@@ -80,6 +83,7 @@ class NoteDetailViewModel extends ChangeNotifier {
     if(_userRepo.user != null && hasInternetConnection) {
       await _noteRepo.updateRemote(note!);
     }
+    isChange = true;
     notifyListeners();
   }
 
@@ -90,6 +94,7 @@ class NoteDetailViewModel extends ChangeNotifier {
         await _noteRepo.archiveRemote(id);
       }
       note = null;
+      isChange = true;
       notifyListeners();
     } catch(err) {
       log(err.toString());
@@ -104,6 +109,10 @@ class NoteDetailViewModel extends ChangeNotifier {
   void clear() {
     titleController.clear();
     contentController.clear();
-    notifyListeners();
+    // notifyListeners();
+  }
+  
+  void resetChangeStatus() {
+    isChange = false;
   }
 }

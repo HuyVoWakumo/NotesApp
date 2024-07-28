@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,27 +30,26 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel(NoteRepo noteRepo, UserRepo userRepo) {
     _noteRepo = noteRepo;
     _userRepo = userRepo;
-    internetSubscription
-      = Connectivity().onConnectivityChanged.listen(
-        (List<ConnectivityResult> result) async {
-          if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
-            hasInternetConnection = true;
-            log('Has internet connection');
-            if (_userRepo.user != null) {
-              notes = await _noteRepo.sync(_userRepo.user!.id);
-            }
-            notifyListeners();
-          } else if (result.contains(ConnectivityResult.none)) {
-            hasInternetConnection = false;
-            notifyListeners();
-            log('No internet connection');
-          }
-    });
+    // internetSubscription
+    //   = Connectivity().onConnectivityChanged.listen(
+    //     (List<ConnectivityResult> result) async {
+    //       if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
+    //         hasInternetConnection = true;
+    //         log('Has internet connection');
+    //         if (_userRepo.user != null) {
+    //           notes = await _noteRepo.sync(_userRepo.user!.id);
+    //         }
+    //         notifyListeners();
+    //       } else if (result.contains(ConnectivityResult.none)) {
+    //         hasInternetConnection = false;
+    //         notifyListeners();
+    //         log('No internet connection');
+    //       }
+    // });
   }
 
   Future<void> getAll() async {
     if (_userRepo.user == null || !hasInternetConnection) {
-      log('Local');
       notes = await _noteRepo.getAllNotArchiveLocal();
     } else {
       await sync();

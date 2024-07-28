@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
@@ -21,9 +23,19 @@ class HomeState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(noteDetailViewModel, (previous, next) {
+    ref.listen(noteDetailViewModel.select((p) => p.isChange), (previous, next) {
+      log('Reload change note');
       ref.read(homeViewModel).getAll();
+      ref.read(noteDetailViewModel).resetChangeStatus();
     });
+    // ref.listen(noteDetailViewModel.select((p) => p.update), (previous, next) {
+    //   log('Reload update');
+    //   ref.read(homeViewModel).getAll();
+    // });
+    // ref.listen(noteDetailViewModel.select((p) => p.archive), (previous, next) {
+    //   log('Reload archive');
+    //   ref.read(homeViewModel).getAll();
+    // });
 
     return Scaffold(
       appBar: _appBar(context),

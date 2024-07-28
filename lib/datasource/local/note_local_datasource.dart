@@ -23,14 +23,13 @@ class NoteLocalDatasource {
 
   Future<List<Note>> getAll() async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note', where: ' id_user IS NULL ', orderBy: 'updated_at DESC');
+    var res = await db.query('Note', orderBy: 'updated_at DESC');
     return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
   Future<List<Note>> getAllNotArchive() async {
     final db = await _myDatabase!.db;
     var res = await db.query('Note', where: ' is_trash = ? ', whereArgs: [0], orderBy: 'updated_at DESC');
-    log(res.toString());
     return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 
@@ -76,7 +75,8 @@ class NoteLocalDatasource {
       ' title=excluded.title, '
       ' content=excluded.content, '
       ' updated_at=excluded.updated_at, '
-      ' is_trash=excluded.is_trash',
+      ' is_trash=excluded.is_trash, '
+      ' id_user=excluded.id_user',
       [note.id, note.title, note.content, note.updatedAt, note.isTrash ? 1 : 0, note.idUser]
     );
   }
