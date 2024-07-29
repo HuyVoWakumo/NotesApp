@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,21 +59,6 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> sync() async {
     notes = await _noteRepo.sync(_userRepo.user!.id);
   }
-
-  
-
-  // Future<void> delete(String id) async {
-  //   try {
-  //     await _noteRepo.deleteLocal(id);
-  //     if (_userRepo.user != null) {
-  //       await _noteRepo.deleteRemote(id);
-  //     }
-  //   } catch (err) {
-  //     log(err.toString());
-  //   } finally {
-  //     await getAll();
-  //   }
-  // }
 
   User? checkCurrentUser() {
     return _userRepo.checkCurrentUser();

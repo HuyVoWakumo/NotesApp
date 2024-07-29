@@ -24,7 +24,9 @@ class AuthView extends ConsumerWidget {
             onSignIn: () => ref.read(authViewModel).signInWithPassword(context),
             onSignUp: () => ref.read(authViewModel).signUp(context),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
+          const Divider(),
+          const SizedBox(height: 10),
           _otherMethods(ref),
           const SizedBox(height: 100),
           _useOfflineText(context),
@@ -55,14 +57,6 @@ class AuthView extends ConsumerWidget {
           ),
           child: Text(ref.watch(authViewModel).isSignIn ? 'New account?' : 'Have an account?'),
         ),
-        const SizedBox(width: 10),
-        ElevatedButton(
-          onPressed: null, 
-          style: ElevatedButton.styleFrom(
-            fixedSize: const Size(180, 30)
-          ),
-          child: const Text('Google'),
-        )
       ],
     );
   }

@@ -43,7 +43,7 @@ class NoteLocalDatasource {
   // filter note 
   Future<List<Note>> filter(String title, String? idUser) async {
     final db = await _myDatabase!.db;
-    var res = await db.query('Note', where: ' title LIKE ? AND id_user IS ? AND is_trash = ? ', whereArgs: ['%$title%', idUser, 0]);
+    var res = await db.query('Note', where: ' title LIKE ? AND is_trash = ? ', whereArgs: ['%$title%', 0], orderBy: 'updated_at DESC');
     return res.isNotEmpty ? res.map((r) => Note.fromLocalJson(r)).toList() : List.empty();
   }
 

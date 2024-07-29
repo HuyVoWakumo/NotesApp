@@ -93,10 +93,7 @@ class NoteRepo {
   /// Fetch all notes by each user from local and remote
   /// and merge them into one, by time priority
   Future<List<Note>> sync(String idUser) async {
-    // log('IdUser: $idUser');
-    List<Note> notes = 
-      await getAllRemote(idUser) + 
-      await getAllLocal();
+    List<Note> notes = await getAllRemote(idUser) + await getAllLocal();
     for (Note note in notes) {
       if (note.updatedAt.contains('T')) {
         note.updatedAt.replaceAll('T', ' ');
@@ -108,32 +105,27 @@ class NoteRepo {
         note.idUser = idUser;
       }
     }
-    // log("Notes");
-    // for (var note in notes) {
-    //   log(note.toLocalJson().toString());
-    // }
-    List<Note> mergedNotes = [];
-    // await Future.sync(() {
 
-      while(notes.isNotEmpty) {
-        Note newNote = notes.removeLast();
-        log('${newNote.toLocalJson()}');
-        try {
-          Note currentNote = mergedNotes.firstWhere((note) => note.id == newNote.id);
-          if (currentNote.isTrash) continue;
-          DateTime currentNoteTime = DateTime.parse(currentNote.updatedAt);
-          DateTime newNoteTime = DateTime.parse(newNote.updatedAt);
-          log('${currentNote.id} : $currentNoteTime - $newNoteTime');
-          if(newNoteTime.isAfter(currentNoteTime)) {
-            currentNote.assign(newNote);
-          } 
-        } on StateError catch (_) {
-          mergedNotes.add(newNote);
-        }
+    List<Note> mergedNotes = [];
+
+    while(notes.isNotEmpty) {
+      Note newNote = notes.removeLast();
+      log('${newNote.toLocalJson()}');
+      try {
+        Note currentNote = mergedNotes.firstWhere((note) => note.id == newNote.id);
+        if (currentNote.isTrash) continue;
+        DateTime currentNoteTime = DateTime.parse(currentNote.updatedAt);
+        DateTime newNoteTime = DateTime.parse(newNote.updatedAt);
+        log('${currentNote.id} : $currentNoteTime - $newNoteTime');
+        if(newNoteTime.isAfter(currentNoteTime)) {
+          currentNote.assign(newNote);
+        } 
+      } on StateError catch (_) {
+        mergedNotes.add(newNote);
       }
-    // });
+    }
+
     mergedNotes.sort((a,b) => DateTime.parse(b.updatedAt).compareTo(DateTime.parse(a.updatedAt)));
-    // log(mergedNotes.map((note) => note.toLocalJson()).toString());
     for(Note note in mergedNotes) {
       _noteLocal!.upsert(note);
       _noteRemote!.upsert(note);
