@@ -25,30 +25,18 @@ class NoteDetailViewModel extends ChangeNotifier {
   late final StreamSubscription<List<ConnectivityResult>> internetSubscription;
   Note? note;
   bool hasInternetConnection = true;
-  bool isChange = false;
+  bool noteChange = false;
+  bool canSave = false;
 
   NoteDetailViewModel(NoteRepo noteRepo, UserRepo userRepo) {
     _noteRepo = noteRepo;
     _userRepo = userRepo;
-    // internetSubscription
-    //   = Connectivity().onConnectivityChanged.listen(
-    //     (List<ConnectivityResult> result) async {
-    //       if (result.contains(ConnectivityResult.mobile) || result.contains(ConnectivityResult.wifi)) {
-    //         hasInternetConnection = true;
-    //         log('Has internet connection');
-    //         notifyListeners();
-    //       } else if (result.contains(ConnectivityResult.none)) {
-    //         hasInternetConnection = false;
-    //         notifyListeners();
-    //         log('No internet connection');
-    //       }
-    // });
   }
 
   Future<void> get(String id) async {
-    final note = await _noteRepo.get(id);
+    note = await _noteRepo.get(id);
     titleController.text = note!.title;
-    contentController.text = note.content;
+    contentController.text = note!.content;
     notifyListeners();
   }
 
@@ -66,7 +54,7 @@ class NoteDetailViewModel extends ChangeNotifier {
       await _noteRepo.addRemote(note!);
     }
     log('Add');
-    isChange = true;
+    noteChange = true;
     notifyListeners();
   }
 
@@ -83,7 +71,7 @@ class NoteDetailViewModel extends ChangeNotifier {
     if(_userRepo.user != null && hasInternetConnection) {
       await _noteRepo.updateRemote(note!);
     }
-    isChange = true;
+    noteChange = true;
     notifyListeners();
   }
 
@@ -94,7 +82,7 @@ class NoteDetailViewModel extends ChangeNotifier {
         await _noteRepo.archiveRemote(id);
       }
       note = null;
-      isChange = true;
+      noteChange = true;
       notifyListeners();
     } catch(err) {
       log(err.toString());
@@ -107,12 +95,23 @@ class NoteDetailViewModel extends ChangeNotifier {
   }
 
   void clear() {
+    canSave = false;
     titleController.clear();
     contentController.clear();
-    // notifyListeners();
   }
   
   void resetChangeStatus() {
-    isChange = false;
+    noteChange = false;
+  }
+
+  void compare() {
+    if((titleController.text.isNotEmpty && contentController.text.isNotEmpty) &&
+      (titleController.text != note?.title || contentController.text != note?.content)) {
+      canSave = true;
+      notifyListeners();
+    } else {
+      canSave = false;
+      notifyListeners();
+    }
   }
 }
