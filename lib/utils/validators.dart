@@ -11,6 +11,7 @@ String? validatePassword(String? value) {
   if(value == null || value.length < 6) {
     return "At least 6 characters";
   }
+  return null;
 }
 
 String? validateEmail(String? value) {
