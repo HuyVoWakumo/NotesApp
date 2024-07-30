@@ -63,7 +63,8 @@ class _NoteDetailState extends ConsumerState<NoteDetailView> {
     return Visibility(
       visible: !ref.watch(noteDetailViewModel).isReadOnly,
       child: IconButton(
-        onPressed: () {
+        onPressed: ref.watch(noteDetailViewModel).canSave
+        ? () {
           if (ref.watch(noteDetailViewModel).formKey.currentState!.validate()) {
             showDialog(
               context: context,
@@ -83,7 +84,8 @@ class _NoteDetailState extends ConsumerState<NoteDetailView> {
                       Navigator.popUntil(context, ModalRoute.withName('/home'));
                     }});
               });
-          }},
+        }} 
+        : null,
         icon: const Icon(Icons.save)
       )
     );

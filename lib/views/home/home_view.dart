@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:notes_app/views/home/home_view_model.dart';
@@ -21,8 +23,10 @@ class HomeState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(noteDetailViewModel, (previous, next) {
+    ref.listen(noteDetailViewModel.select((p) => p.noteChange), (previous, next) {
+      log('Reload change note');
       ref.read(homeViewModel).getAll();
+      ref.read(noteDetailViewModel).resetChangeStatus();
     });
 
     return Scaffold(
@@ -44,8 +48,6 @@ class HomeState extends ConsumerState<HomeView> {
       actions: [
         _searchNavBtn(context),
         _accountBtn(context),
-        // _archiveNavBtn(context),
-        _appInfoBtn(context),
       ],
     );
   }
@@ -94,39 +96,6 @@ class HomeState extends ConsumerState<HomeView> {
     );
   }
   
-  // Widget _archiveNavBtn(BuildContext context) {
-  //   return IconButton(
-  //     onPressed: () {
-  //       Navigator.pushNamed(context, '/archive');
-  //     },
-  //     icon: const Icon(Icons.store),
-  //   );
-  // }
-
-  Widget _appInfoBtn(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        showDialog(
-          context: context, 
-          builder: (context) {
-            return const AlertDialog(
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Designed by - '),
-                  Text('Redesigned by - '),
-                  Text('Illustrations - '),
-                  Text('Icons - '),
-                  Text('Font - '),
-                  Text('Made by - ', textAlign: TextAlign.center)
-                ],
-              ));
-          });
-      }, 
-      icon: const Icon(Icons.info_outline),
-    );
-  }
 
   Widget _notesZone() {
     return ref.watch(homeViewModel).notes.isEmpty
